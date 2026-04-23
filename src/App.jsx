@@ -496,6 +496,370 @@ const NETWORKS = {
         x:700,y:490,color:"#c084fc",status:"consolidated",source:"manual" },
     ],
   },
+  livelihoods: {
+    id: "livelihoods", label: "Livelihoods & Re-Rooting",
+    subtitle: "Weil, Deleuze, Berry — Place, Practice & New Ways of Living",
+    accent: "#34d399", storageKey: "semantic-network-livelihoods",
+    initialNodes: [
+      {
+        id: "livelihoods", term: "Livelihoods",
+        definition: "Not jobs or careers but the full constellation of practices, relationships, skills, and settings through which a person sustains a meaningful life. The deliberate choice of this word over 'work' or 'employment' is itself a theoretical move — it insists that sustaining life is more than economic participation. A livelihood is performed, embedded in place and community, and always more than what an economy can measure or reward.",
+        thinkers: ["Berry","Weil","Arendt","Schumacher"],
+        tags: ["livelihoods","practice","place","community","ethics"],
+        connections: [
+          {to:"re-rooting",label:"theory of change"},
+          {to:"uprootedness",label:"response to"},
+          {to:"performative-livelihood",label:"understood through"},
+          {to:"commoning",label:"sustained through"},
+          {to:"arendt-triad",label:"distinguished within"},
+          {to:"membership",label:"requires"},
+          {to:"milieu",label:"enabled by"},
+        ],
+        nuances: [
+          {thinker:"Berry",note:"For Wendell Berry, a livelihood is inseparable from membership in a place — it involves knowing the land's history, sharing its obligations, and participating in its ongoing life. The destruction of rooted livelihoods is one of the deepest wounds of industrial modernity."},
+          {thinker:"Weil",note:"Weil's analysis of affliction — the condition of those whose livelihoods have been stripped of meaning and dignity — is the negative image of what a livelihood should be: work that connects a person to community, to matter, and to something larger than themselves."},
+          {thinker:"Schumacher",note:"In Small is Beautiful, Schumacher argues that 'Buddhist economics' measures the wellbeing produced per unit of resource consumed — a livelihood is good when it develops human capacities, sustains community, and works with rather than against natural limits."},
+        ],
+        x:500,y:300,color:"#34d399",status:"consolidated",source:"manual",
+      },
+      {
+        id: "re-rooting", term: "Re-Rooting",
+        definition: "The intentional, embodied process by which people who have been structurally displaced from place-based community life — by mobility, precarity, or cultural atomisation — seek to establish durable, generative relationships with specific land and community. Re-rooting is distinguished from nostalgia by its forward orientation: it is not a return to a lost past but the making of something genuinely new from recovered practices and rediscovered needs. It is the theory of change animating this research.",
+        thinkers: ["Berry","Snyder","Weil","Berg"],
+        tags: ["livelihoods","place","community","practice","belonging"],
+        connections: [
+          {to:"livelihoods",label:"animates"},
+          {to:"uprootedness",label:"responds to"},
+          {to:"reterritorialization",label:"is a form of"},
+          {to:"re-inhabitation",label:"ecological dimension of"},
+          {to:"prefigurative-practice",label:"enacted through"},
+          {to:"membership",label:"produces over time"},
+        ],
+        nuances: [
+          {thinker:"Snyder",note:"Gary Snyder's concept of re-inhabitation — learning to live in deep relationship with a specific place — is the ecological dimension of re-rooting. His essays in The Practice of the Wild articulate what it means to inhabit rather than merely occupy a place."},
+          {thinker:"Document",note:"Re-rooting is the proposed name for the broader movement this research tracks — people leaving cities for land, intentional communities, ecovillages, and regenerative farms, not as retreat but as wager on a different way of inhabiting the world."},
+        ],
+        x:500,y:150,color:"#4ade80",status:"consolidated",source:"manual",
+      },
+      {
+        id: "uprootedness", term: "Uprootedness",
+        definition: "For Simone Weil, uprootedness is the most dangerous affliction of modernity — more fundamental than poverty or injustice because it destroys the very conditions under which a person can think, feel, and act with integrity. Uprootedness is not merely geographical displacement but the loss of living connection to tradition, community, and place. A person can be uprooted while remaining geographically stationary if the community around them has disintegrated or the traditions sustaining them have been severed.",
+        thinkers: ["Weil"],
+        tags: ["livelihoods","place","belonging","modernity","critique"],
+        connections: [
+          {to:"livelihoods",label:"what livelihoods heal"},
+          {to:"re-rooting",label:"what re-rooting responds to"},
+          {to:"need-for-roots",label:"opposite of"},
+          {to:"deterritorialization",label:"Deleuzian parallel to"},
+          {to:"membership",label:"absence of"},
+        ],
+        nuances: [
+          {thinker:"Weil",note:"In The Need for Roots (1943), Weil argues that uprootedness is self-propagating: the uprooted person tends to uproot others, either by imposing their own condition or by seeking the violent conquest of new territories. Colonialism is for Weil the most virulent form of uprootedness exported onto others."},
+          {thinker:"Contemporary resonance",note:"Weil's diagnosis anticipates the sociological literature on social atomisation, loneliness epidemics, and the collapse of civic life — uprootedness names the phenomenological dimension of what social science measures as declining social capital."},
+        ],
+        x:280,y:160,color:"#f87171",status:"consolidated",source:"manual",
+      },
+      {
+        id: "need-for-roots", term: "The Need for Roots",
+        definition: "Simone Weil's positive counterpart to uprootedness: rootedness in community, tradition, and place as a fundamental human need, as basic as food. Crucially for Weil, roots must be living — a person needs to participate actively in a community that carries a living past into a real future. Roots that are merely inherited without active participation wither; roots require ongoing practice, obligation, and attention to remain nourishing.",
+        thinkers: ["Weil"],
+        tags: ["livelihoods","belonging","community","place","ethics"],
+        connections: [
+          {to:"uprootedness",label:"opposite of"},
+          {to:"attention",label:"requires"},
+          {to:"membership",label:"realised through"},
+          {to:"re-rooting",label:"philosophical foundation of"},
+          {to:"milieu",label:"grown in"},
+        ],
+        nuances: [
+          {thinker:"Weil",note:"The Need for Roots was Weil's final major work, written for the Free French government in exile in 1943 as a plan for the spiritual renewal of France after liberation. She died before it was published. Its scope is extraordinary — moving from individual need to civilisational diagnosis."},
+          {thinker:"Obligation",note:"For Weil, rootedness comes with obligations that go in both directions: the community owes the individual the conditions for spiritual growth; the individual owes the community active participation and care. Rights without obligations produce the illusion of roots without their substance."},
+        ],
+        x:160,y:260,color:"#fb923c",status:"consolidated",source:"manual",
+      },
+      {
+        id: "attention", term: "Attention",
+        definition: "Simone Weil's central ethical and epistemological concept: the capacity to be fully present to what is actually there — a person, a plant, a place, a task — without projecting onto it or forcing it into pre-existing categories. For Weil, attention is both the highest form of love and the precondition for genuine knowledge. It is not effort but a kind of waiting — an emptying of the self so that what is real can be received. Attention connects directly to the kind of slow, embodied knowing that ecovillage and permaculture practice cultivates.",
+        thinkers: ["Weil"],
+        tags: ["livelihoods","ethics","epistemology","embodiment","practice"],
+        connections: [
+          {to:"need-for-roots",label:"required by"},
+          {to:"slow-knowledge",label:"produces"},
+          {to:"re-inhabitation",label:"cultivated through"},
+          {to:"permaculture",label:"epistemological basis of"},
+        ],
+        nuances: [
+          {thinker:"Weil",note:"In Waiting for God and her notebooks, Weil distinguishes attention from will and effort: genuine attention cannot be forced. It is the orientation of the whole self toward something outside the self, without agenda. This is why she connects it to prayer — and why it is the opposite of the grasping, extractive relation to nature and persons that modernity cultivates."},
+          {thinker:"Cross-network",note:"Weil's attention resonates with Formgefühl in the Vienna network — both name a cultivated, embodied capacity for presence that exceeds rational instruction — and with Pickering's performative idiom, where genuine engagement with the world requires receptivity to its resistances and surprises."},
+        ],
+        x:160,y:400,color:"#c084fc",status:"consolidated",source:"manual",
+      },
+      {
+        id: "territory", term: "Territory",
+        definition: "From Deleuze and Guattari: not merely land but any stable configuration of practices, relationships, expressions, and affects that gives a way of life its consistency and coherence. Territory is always simultaneously geographical and existential — a home, a rhythm, a set of habits and relationships that make a world liveable and recognisable. Territory is not given but made, and it is always potentially undone.",
+        thinkers: ["Deleuze","Guattari"],
+        tags: ["livelihoods","place","Deleuze","process","belonging"],
+        connections: [
+          {to:"deterritorialization",label:"undone by"},
+          {to:"reterritorialization",label:"remade through"},
+          {to:"geophilosophy",label:"ground of"},
+          {to:"milieu",label:"related to"},
+          {to:"re-rooting",label:"what re-rooting makes"},
+        ],
+        nuances: [
+          {thinker:"Deleuze & Guattari",note:"In A Thousand Plateaus, territory emerges when expressive qualities — birdsong, colour, posture, rhythm — are used to mark and claim a domain. Territory is thus fundamentally performative: it is constituted through repeated expression, not prior possession. This makes it fragile and dynamic rather than fixed."},
+        ],
+        x:720,y:160,color:"#38bdf8",status:"consolidated",source:"manual",
+      },
+      {
+        id: "deterritorialization", term: "Deterritorialization",
+        definition: "The process by which territories come undone — when the forces of capital, mobility, crisis, or conquest dissolve the configurations of practice, relationship, and meaning that made a livelihood possible. Modernity is in large part a massive, ongoing deterritorialization: of peasant communities, craft traditions, local economies, indigenous knowledge systems, and place-based cultures. Deterritorialization is not always catastrophic — it can be creative — but when imposed from outside and without replacement, it produces uprootedness.",
+        thinkers: ["Deleuze","Guattari"],
+        tags: ["livelihoods","Deleuze","modernity","critique","process"],
+        connections: [
+          {to:"territory",label:"undoes"},
+          {to:"reterritorialization",label:"always accompanied by"},
+          {to:"uprootedness",label:"Weil's parallel concept"},
+          {to:"re-rooting",label:"what re-rooting responds to"},
+          {to:"institutional-logics",label:"driven by"},
+        ],
+        nuances: [
+          {thinker:"Deleuze & Guattari",note:"For Deleuze and Guattari, deterritorialization and reterritorialization always occur together — there is no pure flight without a new landing. Capital deterritorialises labour from land and community and reterritorialises it onto the wage relation and the market. The question is always: what kind of reterritorialization follows?"},
+          {thinker:"Colonial dimension",note:"Colonialism is deterritorialization at its most violent — the forced dissolution of existing territories and their replacement with extractive configurations. Weil makes a parallel argument about uprootedness: the coloniser, already uprooted, exports uprootedness as a condition of domination."},
+        ],
+        x:840,y:260,color:"#f472b6",status:"consolidated",source:"manual",
+      },
+      {
+        id: "reterritorialization", term: "Reterritorialization",
+        definition: "The making of new territories on the far side of deterritorialization — the reassembly of practices, relationships, expressions, and meanings into configurations that can hold and sustain life. Re-rooting communities are engaged in reterritorialization: creating new configurations of land, practice, relationship, and meaning. Crucially for Deleuze and Guattari, reterritorialization never simply restores what was lost — it always produces something new, even when it draws on inherited forms.",
+        thinkers: ["Deleuze","Guattari"],
+        tags: ["livelihoods","Deleuze","place","process","community"],
+        connections: [
+          {to:"territory",label:"produces new"},
+          {to:"deterritorialization",label:"follows from"},
+          {to:"re-rooting",label:"philosophical frame for"},
+          {to:"prefigurative-practice",label:"enacted through"},
+          {to:"islands-of-stability",label:"parallel concept in Pickering"},
+        ],
+        nuances: [
+          {thinker:"Deleuze & Guattari",note:"Reterritorialization is not conservative restoration but creative reassembly. An ecovillage is a reterritorialization: it draws on traditional practices of communal land management, craft, and mutual aid, but assembles them in a new configuration adequate to contemporary conditions."},
+        ],
+        x:840,y:400,color:"#34d399",status:"consolidated",source:"manual",
+      },
+      {
+        id: "geophilosophy", term: "Geophilosophy",
+        definition: "Deleuze and Guattari's argument, developed in What is Philosophy?, that thinking is always of a territory — that philosophy, like agriculture, requires soil. Ideas do not float free of place; they emerge from specific geographic, climatic, social, and cultural conditions. Greek philosophy emerged from the specific deterritorialization of the Aegean city-state; European philosophy from specific configurations of land, church, and state. This gives philosophical weight to the ecovillage intuition that where and how you live shapes what you can think.",
+        thinkers: ["Deleuze","Guattari"],
+        tags: ["livelihoods","Deleuze","epistemology","place","philosophy"],
+        connections: [
+          {to:"territory",label:"philosophy rooted in"},
+          {to:"re-inhabitation",label:"grounds"},
+          {to:"slow-knowledge",label:"what geophilosophy produces"},
+          {to:"milieu",label:"the soil of thought"},
+        ],
+        nuances: [
+          {thinker:"Deleuze & Guattari",note:"In What is Philosophy?, Deleuze and Guattari argue that the Greeks invented philosophy not because they were uniquely rational but because the deterritorialized space of the Aegean archipelago — trading cities without strong centralised authority — created the conditions for immanent rather than transcendent thinking. Geography is constitutive of thought, not its backdrop."},
+          {thinker:"Cross-network",note:"Geophilosophy connects to the Ontological Turn in the TD/Rupture network: both argue that different configurations of practice and place produce genuinely different worlds of knowledge, not merely different perspectives on one world."},
+        ],
+        x:720,y:400,color:"#facc15",status:"consolidated",source:"manual",
+      },
+      {
+        id: "performative-livelihood", term: "Performative Livelihood",
+        definition: "A livelihood understood through Pickering's performative idiom — not a position you occupy or a role you represent, but a set of practices you enact. What you do constitutes what you are, rather than the reverse. A performative livelihood is always in process, always shaped by the resistances and affordances of its material and social environment, and always open to transformation through the ongoing dance of agency between the person and their world.",
+        thinkers: ["Pickering","Weil","Berry"],
+        tags: ["livelihoods","practice","epistemology","STS","becoming"],
+        connections: [
+          {to:"livelihoods",label:"reframes"},
+          {to:"attention",label:"requires Weil's"},
+          {to:"slow-knowledge",label:"produces"},
+          {to:"permaculture",label:"exemplified in"},
+        ],
+        nuances: [
+          {thinker:"Cross-network link",note:"This node is an explicit bridge to the TD/Rupture network's Performative Idiom node. The insight is that what Pickering develops as an epistemological method — attending to what practices do rather than what they represent — applies equally to how we understand livelihoods: not as positions in a social structure but as ongoing enactments."},
+        ],
+        x:340,y:430,color:"#818cf8",status:"consolidated",source:"manual",
+      },
+      {
+        id: "slow-knowledge", term: "Slow Knowledge",
+        definition: "The kind of knowing that accumulates through sustained attention to a particular place, practice, or community over time — knowing when the first frost comes, which plants grow well together, how the soil changes across a field, how the community handles conflict. Slow knowledge is irreducibly local and cannot be fully transferred through texts or courses; it requires presence, repetition, and relationship. It is opposed to the extractive, generalizable, transferable knowledge that universities and markets value and reward.",
+        thinkers: ["Orr","Snyder","Berry","Weil"],
+        tags: ["livelihoods","epistemology","place","practice","embodiment"],
+        connections: [
+          {to:"attention",label:"produced by"},
+          {to:"permaculture",label:"cultivated in"},
+          {to:"re-inhabitation",label:"accumulated through"},
+          {to:"performative-livelihood",label:"grounds"},
+          {to:"membership",label:"deepens with"},
+        ],
+        nuances: [
+          {thinker:"David Orr",note:"David Orr coined the term in Ecological Literacy — contrasting slow knowledge, which is place-based, embodied, and intergenerational, with the fast knowledge of information economies, which is decontextualised, transferable, and quickly obsolescent."},
+          {thinker:"Berry",note:"Berry's concept of 'the way of ignorance' is related: genuine knowledge of a place requires first acknowledging how much you do not and cannot know from the outside. Slow knowledge begins with epistemic humility about the limits of general principles."},
+        ],
+        x:340,y:560,color:"#fb923c",status:"consolidated",source:"manual",
+      },
+      {
+        id: "permaculture", term: "Permaculture",
+        definition: "Not merely a gardening or farming system but an epistemology and design philosophy: a way of observing, designing, and inhabiting that takes ecological relationships as its primary model. The three ethics — earth care, people care, fair share — constitute a practical ethics of livelihood. Permaculture design begins with observation rather than intervention: years of watching how water moves, where frost settles, which species associate naturally, before any design is imposed. In this sense it is a discipline of attention.",
+        thinkers: ["Mollison","Holmgren","Massy"],
+        tags: ["livelihoods","ecology","practice","design","ethics"],
+        connections: [
+          {to:"slow-knowledge",label:"cultivates"},
+          {to:"attention",label:"epistemological basis"},
+          {to:"re-inhabitation",label:"method of"},
+          {to:"commoning",label:"social dimension of"},
+          {to:"prefigurative-practice",label:"embodies"},
+        ],
+        nuances: [
+          {thinker:"Holmgren",note:"David Holmgren's later work frames permaculture as a response to energy descent — the coming reduction in available energy — rather than merely a set of gardening techniques. It is a design system for building resilient livelihoods on a contracting resource base."},
+          {thinker:"Observation principle",note:"The foundational permaculture principle — observe and interact before designing — is philosophically radical: it insists that the place knows things the designer does not, and that design must emerge from sustained listening rather than imposed template."},
+        ],
+        x:500,y:500,color:"#4ade80",status:"consolidated",source:"manual",
+      },
+      {
+        id: "commoning", term: "Commoning",
+        definition: "The practice of governing shared resources collectively, outside both market and state logic. From Bollier and Helfrich: commons are not things but social processes — ongoing practices of negotiation, care, and collective stewardship. An ecovillage is in large part an experiment in commoning land, infrastructure, knowledge, time, and skills. Commoning requires the ongoing production of shared norms, roles, and relationships — it is never finished but always in process.",
+        thinkers: ["Bollier","Helfrich","Ostrom","Federici"],
+        tags: ["livelihoods","community","commons","governance","practice"],
+        connections: [
+          {to:"livelihoods",label:"sustained through"},
+          {to:"permaculture",label:"social dimension of"},
+          {to:"prefigurative-practice",label:"instantiates"},
+          {to:"membership",label:"deepens"},
+          {to:"ecovillage",label:"practised in"},
+        ],
+        nuances: [
+          {thinker:"Ostrom",note:"Elinor Ostrom's empirical work demolished the 'tragedy of the commons' myth: communities do successfully manage shared resources without privatisation or state control, through locally evolved rules, graduated sanctions, and collective monitoring. Her eight design principles for sustainable commons governance are widely applied in ecovillage contexts."},
+          {thinker:"Federici",note:"Silvia Federici's work on commoning emphasises its feminist dimension: commons historically depended on women's reproductive labour, and their enclosure dispossessed women first. A genuine politics of commoning must address who bears the cost of care."},
+        ],
+        x:660,y:500,color:"#38bdf8",status:"consolidated",source:"manual",
+      },
+      {
+        id: "prefigurative-practice", term: "Prefigurative Practice",
+        definition: "The idea that the means must embody the ends — that you build the new world in the shell of the old by living differently now, rather than waiting for structural change first. Ecovillages are explicitly prefigurative: they are not waiting for a better society to be legislated into existence; they are attempting to instantiate one in the present, as a demonstration, a refuge, and a seed. Prefigurative practice is vulnerable to the critique of privilege — who can afford to live differently? — but its defenders argue that without living experiments, alternative futures remain merely theoretical.",
+        thinkers: ["Boggs","Yates","Graeber"],
+        tags: ["livelihoods","community","practice","politics","ethics"],
+        connections: [
+          {to:"re-rooting",label:"enacted through"},
+          {to:"commoning",label:"instantiates"},
+          {to:"ecovillage",label:"primary site of"},
+          {to:"reterritorialization",label:"produces new"},
+          {to:"permaculture",label:"embodies"},
+        ],
+        nuances: [
+          {thinker:"Graeber",note:"David Graeber argued that prefigurative politics is not utopian naivety but the only coherent form of radical practice: if you cannot demonstrate the possibility of different social relations in the present, you have no grounds to claim they are possible in the future."},
+          {thinker:"Tension",note:"The tension within prefigurative practice is between depth and scale: communities that go deepest into alternative ways of living often become most insular and least connected to broader social change. The research question is whether this tension can be held productively."},
+        ],
+        x:660,y:360,color:"#f59e0b",status:"consolidated",source:"manual",
+      },
+      {
+        id: "ecovillage", term: "Ecovillage",
+        definition: "Intentional communities that combine ecological design, alternative economics, and social experimentation in pursuit of sustainable and meaningful ways of living. Ecovillages are simultaneously practical experiments — in food production, energy systems, governance, and community relations — and cultural proposals: ways of demonstrating that different livelihoods are possible. The Global Ecovillage Network connects hundreds of such communities across every continent, each with its own configuration of priorities and practices.",
+        thinkers: ["GEN","Gilman","Bang"],
+        tags: ["livelihoods","community","ecology","practice","place"],
+        connections: [
+          {to:"prefigurative-practice",label:"primary site of"},
+          {to:"commoning",label:"practises"},
+          {to:"re-inhabitation",label:"method of"},
+          {to:"permaculture",label:"often organised around"},
+          {to:"slow-knowledge",label:"accumulates"},
+          {to:"reterritorialization",label:"enacts"},
+        ],
+        nuances: [
+          {thinker:"Diversity",note:"Ecovillages range enormously — from spiritually oriented communities like Findhorn (Scotland) and Auroville (India), to politically explicit projects like Christiania (Copenhagen), to more agrarian experiments like those documented by the Dark Mountain Project. What unites them is the attempt to design livelihoods rather than merely inhabit existing ones."},
+          {thinker:"Research gap",note:"Most academic literature either treats ecovillages from outside (sociological ethnography, sustainability science) or is produced by practitioners from within. Sustained qualitative research that takes seriously both the intellectual stakes and the embodied reality — including failures and contradictions — is the gap this project addresses."},
+        ],
+        x:820,y:500,color:"#34d399",status:"consolidated",source:"manual",
+      },
+      {
+        id: "re-inhabitation", term: "Re-Inhabitation",
+        definition: "From bioregionalists Peter Berg and Gary Snyder: the deliberate practice of learning to live in deep relationship with a specific place — its watershed, ecology, seasonal rhythms, indigenous history, and non-human communities. Where re-rooting names the broader social process of return to place-based life, re-inhabitation names its ecological and perceptual dimension: learning the land as a living partner rather than a resource or backdrop. Re-inhabitation takes years and cannot be rushed.",
+        thinkers: ["Berg","Snyder","Kimmerer"],
+        tags: ["livelihoods","place","ecology","practice","belonging"],
+        connections: [
+          {to:"re-rooting",label:"ecological dimension of"},
+          {to:"slow-knowledge",label:"accumulated through"},
+          {to:"attention",label:"requires"},
+          {to:"permaculture",label:"method of"},
+          {to:"geophilosophy",label:"grounded by"},
+        ],
+        nuances: [
+          {thinker:"Kimmerer",note:"Robin Wall Kimmerer's Braiding Sweetgrass extends re-inhabitation to include indigenous epistemologies: learning a place means learning its names in its own language, and learning the protocols of reciprocity that make sustained relationship possible. Re-inhabitation without this dimension risks reproducing settler relationships to land under a greener name."},
+          {thinker:"Snyder",note:"Snyder's bioregionalism insists on the watershed as the primary unit of belonging: you know where you are when you know where your water comes from and where it goes. This is both geographical fact and ethical orientation."},
+        ],
+        x:340,y:160,color:"#4ade80",status:"consolidated",source:"manual",
+      },
+      {
+        id: "membership", term: "Membership",
+        definition: "Wendell Berry's term for belonging to a place and community in the full sense: knowing its history, sharing its obligations, participating in its ongoing life across time. Membership is what you accumulate by staying — it is the opposite of mobility, of treating place as interchangeable backdrop to a portable life. Berry argues that the destruction of membership is one of the deepest wounds of industrial modernity: when people no longer belong anywhere in this full sense, communities lose their capacity for self-governance and self-repair.",
+        thinkers: ["Berry"],
+        tags: ["livelihoods","belonging","community","place","ethics"],
+        connections: [
+          {to:"livelihoods",label:"required by"},
+          {to:"re-rooting",label:"produced through"},
+          {to:"need-for-roots",label:"Weil's parallel concept"},
+          {to:"slow-knowledge",label:"deepens with"},
+          {to:"commoning",label:"deepened by"},
+          {to:"uprootedness",label:"absence of"},
+        ],
+        nuances: [
+          {thinker:"Berry",note:"In essays collected in What Are People For? and The Way of Ignorance, Berry argues that membership requires reciprocity across time: you inherit obligations from those who came before and pass them to those who come after. A community without this temporal depth is not a community but an aggregate of individuals."},
+        ],
+        x:180,y:480,color:"#fb923c",status:"consolidated",source:"manual",
+      },
+      {
+        id: "milieu", term: "Milieu",
+        definition: "The surrounding environment — social, spatial, cultural, ecological — that makes certain livelihoods, thoughts, and ways of being possible and others unthinkable. A milieu is not merely a context or backdrop but an active shaping force: it summons certain capacities and suppresses others, makes certain futures imaginable and others invisible. The concept sits at the intersection of Deleuze's territory and Weil's need for roots — it is the medium in which a person either flourishes or withers.",
+        thinkers: ["Canguilhem","Deleuze","Simondon"],
+        tags: ["livelihoods","place","community","ecology","conditions"],
+        connections: [
+          {to:"livelihoods",label:"enables or constrains"},
+          {to:"territory",label:"related to"},
+          {to:"need-for-roots",label:"what roots grow in"},
+          {to:"geophilosophy",label:"the soil of thought"},
+          {to:"slow-knowledge",label:"source of"},
+        ],
+        nuances: [
+          {thinker:"Canguilhem",note:"Georges Canguilhem's concept of milieu — developed in The Normal and the Pathological — treats organism and environment as constitutively related: what counts as normal or pathological depends on the milieu in which life unfolds. A livelihood is healthy or afflicted relative to its milieu, not in the abstract."},
+          {thinker:"Document",note:"Listed in the Black Swanning semantic network document without elaboration — its position between institutional logics and geophilosophy suggests it is meant to name the intermediate scale between the individual and the system."},
+        ],
+        x:180,y:350,color:"#818cf8",status:"provisional",source:"paper",
+      },
+      {
+        id: "arendt-triad", term: "Labour, Work & Action",
+        definition: "Hannah Arendt's tripartite distinction in The Human Condition: Labour is the biological process of sustaining life — cyclical, endless, leaving no permanent trace. Work is the fabrication of a durable human world — objects, institutions, stories that outlast individual lives. Action is the capacity to begin something genuinely new in the public realm — to initiate, to appear, to be seen. A livelihood might involve all three in different proportions, but modern economies tend to reduce everything to labour — endless, meaningless process — while suppressing the dimensions of work and action that give life dignity and meaning.",
+        thinkers: ["Arendt"],
+        tags: ["livelihoods","ethics","politics","practice","philosophy"],
+        connections: [
+          {to:"livelihoods",label:"distinguished within"},
+          {to:"prefigurative-practice",label:"action dimension of"},
+          {to:"commoning",label:"work and action dimension of"},
+          {to:"uprootedness",label:"reduction to labour as"},
+        ],
+        nuances: [
+          {thinker:"Arendt",note:"For Arendt, the danger of modernity is that the animal laborans — the labouring animal, concerned only with biological survival and consumption — has triumphed over the homo faber (the maker of durable things) and the citizen (the actor in public life). A meaningful livelihood must include work and action, not only labour."},
+          {thinker:"Document",note:"Listed explicitly in the Black Swanning document under vocabulary still requiring elaboration — its position alongside milieu and institutional logics suggests it is meant to provide a philosophical grammar for distinguishing different modes of sustaining life."},
+        ],
+        x:660,y:160,color:"#f472b6",status:"consolidated",source:"paper",
+      },
+      {
+        id: "institutional-logics", term: "Institutional Logics",
+        definition: "The rules, norms, and taken-for-granted assumptions that govern how institutions operate and what kinds of livelihoods, knowledge, and ways of life they can recognise, support, or suppress. Institutional logics are not merely bureaucratic rules but deep cultural frames that shape what appears rational, legitimate, and possible within a given field. The logic of the market, the university, the state, and the hospital each produce different subjects, different forms of value, and different exclusions.",
+        thinkers: ["Friedland","Alford","Thornton"],
+        tags: ["livelihoods","institution","power","community","critique"],
+        connections: [
+          {to:"livelihoods",label:"govern what counts as"},
+          {to:"deterritorialization",label:"driver of"},
+          {to:"prefigurative-practice",label:"what prefiguration resists"},
+          {to:"milieu",label:"shapes"},
+          {to:"open-ended-learning",label:"what open learning resists"},
+        ],
+        nuances: [
+          {thinker:"Document",note:"Listed in the Black Swanning document as a node requiring elaboration, alongside milieu and Arendt's triad. Its force is in naming why alternative livelihoods face structural resistance: they violate the taken-for-granted assumptions about what counts as productive, valuable, or rational that institutions reproduce automatically."},
+        ],
+        x:500,y:430,color:"#facc15",status:"provisional",source:"paper",
+      },
+    ],
+  },
 };
 
 // ---CONSTANTS ---
@@ -521,7 +885,7 @@ const TAG_COLORS = {
   accountability:"#34d399",hope:"#facc15",justice:"#4ade80",law:"#38bdf8",
   power:"#818cf8",action:"#4ade80",time:"#38bdf8",agency:"#34d399",
   memory:"#c084fc",language:"#818cf8",
-  systems:"#34d399",conditions:"#38bdf8",conditions:"#38bdf8",
+  systems:"#34d399",conditions:"#38bdf8",
   cognition:"#c084fc",schema:"#818cf8",learning:"#4ade80",
   development:"#fb923c",balance:"#facc15",dynamics:"#f472b6",
   tension:"#f472b6",STS:"#34d399",practice:"#38bdf8",plurality:"#4ade80",
@@ -529,6 +893,9 @@ const TAG_COLORS = {
   emergence:"#4ade80",becoming:"#c084fc",openness:"#38bdf8",
   activation:"#fb923c",community:"#818cf8",discourse:"#38bdf8",
   creation:"#4ade80",integration:"#34d399",obstacle:"#f472b6",
+  livelihoods:"#34d399",belonging:"#fb923c",ecology:"#4ade80",
+  Deleuze:"#38bdf8",commons:"#34d399",governance:"#facc15",
+  philosophy:"#818cf8",politics:"#f472b6",
   default:"#94a3b8",
 };
 const tagColor = t => TAG_COLORS[t] || TAG_COLORS.default;
@@ -603,7 +970,7 @@ Return ONLY this JSON structure:
     headers: {
       "Content-Type": "application/json",
       "anthropic-version": "2023-06-01",
-      "x-api-key": import.meta.env.VITE_ANTHROPIC_API_KEY,
+      "anthropic-dangerous-direct-browser-access": "true",
     },
     body: JSON.stringify({
       model: "claude-sonnet-4-20250514",
@@ -964,8 +1331,9 @@ function NetworkView({ networkId, accent }) {
   useEffect(() => {
     async function load() {
       try {
-        const saved = JSON.parse(localStorage.getItem(net.storageKey));
-if (saved) {
+        const result = await window.storage.get(net.storageKey, false);
+        if (result?.value) {
+          const saved = JSON.parse(result.value);
           if (Array.isArray(saved) && saved.length > 0) {
             const savedIds = new Set(saved.map(n=>n.id));
             const newInitial = net.initialNodes.filter(n=>!savedIds.has(n.id));
@@ -982,7 +1350,7 @@ if (saved) {
   const save = useCallback(async (newNodes) => {
     setSaveStatus("saving…");
     try {
-      localStorage.setItem(net.storageKey, JSON.stringify(newNodes));
+      await window.storage.set(net.storageKey, JSON.stringify(newNodes), false);
       setSaveStatus("saved ✓");
       setTimeout(()=>setSaveStatus(""),2000);
     } catch { setSaveStatus("error"); }
@@ -1036,7 +1404,7 @@ if (saved) {
     setSelected(null);
   };
   const handleReset = async () => {
-    try { localStorage.removeItem(net.storageKey); } catch {}
+    try { await window.storage.delete(net.storageKey, false); } catch {}
     setNodes(net.initialNodes); setSelected(null);
   };
 
