@@ -1,866 +1,57 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { metaNetwork } from "./networks/meta.js";
+import { methodsNetwork } from "./networks/methods.js";
+import { viennaNetwork } from "./networks/vienna.js";
+import { livelihoodsNetwork } from "./networks/livelihoods.js";
+import { simulationNetwork } from "./networks/simulation.js";
+import { worldingNetwork } from "./networks/worlding.js";
+import { movementNetwork } from "./networks/movement.js";
+import { creativityNetwork } from "./networks/creativity.js";
+import { dsaNetwork } from "./networks/dsa.js";
 
-// ---NETWORK DEFINITIONS ---
+// ---NETWORK REGISTRY ---
+// To add a new vocabulary: import it above and add it to NETWORKS below.
+// To create a context-specific build (e.g. Cobana): only import the relevant networks.
 
 const NETWORKS = {
-  td: {
-    id: "td", label: "Transdisciplinarity & Rupture",
-    subtitle: "McCarthy — Epistemological Frameworks",
-    accent: "#c084fc", storageKey: "semantic-network-nodes",
-    initialNodes: [
-      {
-        id: "rupture", term: "Rupture",
-        definition: "A radical break or discontinuity in the development of knowledge, science, or social imaginaries. Rupture is not mere revision — it signals a transformation of the very ground from which knowledge grows. Depending on the thinker, rupture can occur at the level of a single discipline, across sciences, or in the deepest strata of a civilization's assumptions about what knowledge is and who produces it.",
-        thinkers: ["Bachelard","Kuhn","Foucault","Castoriadis","Morin"],
-        tags: ["epistemology","change","science","history"],
-        connections: [
-          {to:"epistemological-obstacle",label:"overcome by"},{to:"paradigm",label:"disrupts"},
-          {to:"episteme",label:"transforms"},{to:"social-imaginary",label:"reshapes"},
-          {to:"transdisciplinarity",label:"enacted through"},
-          {to:"accommodation",label:"triggers"},{to:"islands-of-stability",label:"produces new"},
-          {to:"enabling-constraining",label:"caused by shift in"},
-        ],
-        nuances: [
-          {thinker:"Bachelard",note:"Rupture occurs within a discipline when experimental evidence challenges epistemological obstacles — the ingrained common-sense myths that unknowingly hinder scientific progress."},
-          {thinker:"Kuhn",note:"Crisis and revolutionary science are analogous to rupture: a period when anomalies accumulate and the existing paradigm can no longer contain them, opening space for a new one."},
-          {thinker:"Foucault",note:"Epistemic rupture refers to the transformation of the deepest historical a priori — the conditions of possibility for knowledge itself — across entire civilizational eras."},
-          {thinker:"Castoriadis",note:"Rupture is the moment when the instituted imaginary faces creative tension with the instituting imaginary, giving rise to genuinely new social forms."},
-        ],
-        x:500,y:300,color:"#c084fc",status:"consolidated",source:"manual",
-      },
-      {
-        id: "epistemological-obstacle", term: "Epistemological Obstacle",
-        definition: "For Bachelard, the epistemological obstacle is not an external difficulty but an internal one — a form of knowledge itself that impedes further knowing. Common sense, familiar analogies, and premature unification all function as obstacles by making the world seem already understood. Overcoming them requires rupture: a deliberate break with what felt like clarity.",
-        thinkers: ["Bachelard"],
-        tags: ["epistemology","science","obstacle"],
-        connections: [{to:"rupture",label:"overcome by"},{to:"assimilation",label:"perpetuated by"}],
-        x:280,y:180,color:"#818cf8",status:"consolidated",source:"manual",
-      },
-      {
-        id: "paradigm", term: "Paradigm",
-        definition: "Kuhn's concept of the shared exemplar — the constellation of beliefs, values, and problem-solving techniques shared by a scientific community. A paradigm defines what counts as a legitimate problem and what counts as a solution. When anomalies accumulate beyond a threshold, the paradigm enters crisis, and revolutionary science becomes possible.",
-        thinkers: ["Kuhn"],
-        tags: ["science","epistemology","community"],
-        connections: [{to:"rupture",label:"disrupted by"},{to:"transdisciplinarity",label:"crossed by"}],
-        x:720,y:180,color:"#38bdf8",status:"consolidated",source:"manual",
-      },
-      {
-        id: "episteme", term: "Episteme",
-        definition: "Foucault's term for the underlying historical a priori that governs what can be known and said in a given era. The episteme is not a worldview held by individuals but the invisible structure that makes certain discourses possible and others unthinkable. Epistemic ruptures are not chosen — they are geological shifts in the conditions of knowledge.",
-        thinkers: ["Foucault"],
-        tags: ["epistemology","history","power","discourse"],
-        connections: [{to:"rupture",label:"transformed by"},{to:"ontological-turn",label:"related to"}],
-        x:720,y:420,color:"#f472b6",status:"consolidated",source:"manual",
-      },
-      {
-        id: "social-imaginary", term: "Social Imaginary",
-        definition: "For Castoriadis, the social imaginary is the creative, self-instituting capacity of society — the radical imagination that produces new meanings, institutions, and forms of life. The instituted imaginary is what has been crystallised into norms and structures; the instituting imaginary is the living force that can rupture and re-create those structures.",
-        thinkers: ["Castoriadis","Taylor"],
-        tags: ["imagination","society","creation"],
-        connections: [{to:"rupture",label:"reshaped by"},{to:"open-ended-learning",label:"enables"}],
-        x:280,y:420,color:"#fb923c",status:"consolidated",source:"manual",
-      },
-      {
-        id: "transdisciplinarity", term: "Transdisciplinarity",
-        definition: "A mode of inquiry that does not merely combine disciplines but operates at a level of abstraction where disciplinary boundaries themselves are questioned. Transdisciplinarity is not interdisciplinarity — it does not coordinate disciplines from outside them but generates a new framework that reorganises what disciplines can see. It is, in this sense, a form of institutionalised rupture.",
-        thinkers: ["Morin","Nicolescu","Piaget"],
-        tags: ["epistemology","complexity","integration","science"],
-        connections: [{to:"rupture",label:"enacted through"},{to:"paradigm",label:"crosses"},{to:"open-ended-learning",label:"requires"}],
-        x:500,y:520,color:"#4ade80",status:"consolidated",source:"manual",
-      },
-      // NEW NODES FROM DOCUMENT
-      {
-        id: "enabling-constraining", term: "Enabling / Constraining",
-        definition: "A paired conceptual frame from systems language: enabling refers to providing the conditions under which certain events, patterns, and processes become possible; constraining refers to the conditions that restrict them. Together, the pair describes how any configuration of forces, agents, or structures shapes the possibility space for action — without determining outcomes. The frame deliberately avoids causal determinism while remaining precise about directionality.",
-        thinkers: ["Pickering","systems theory"],
-        tags: ["systems","conditions","agency","process"],
-        connections: [
-          {to:"rupture",label:"shift in causes"},
-          {to:"accommodation",label:"when constraining exceeds threshold"},
-          {to:"dances-of-agency",label:"describes dynamics of"},
-          {to:"islands-of-stability",label:"configurations of"},
-        ],
-        nuances: [
-          {thinker:"Document",note:"Distinguished from 'assimilation and accommodation' in that enabling/constraining speaks from a systems perspective — about forces and patterns — while assimilation/accommodation speaks from an agent perspective about how understanding changes."},
-          {thinker:"Pickering",note:"In Pickering's performative idiom, enabling and constraining describe the back-and-forth mangle of practice: human projects are enabled by nonhuman resistances overcome and constrained by those that hold."},
-        ],
-        x:160,y:300,color:"#34d399",status:"consolidated",source:"paper",
-      },
-      {
-        id: "assimilation", term: "Assimilation",
-        definition: "The process by which a person or organisation incorporates new information or experiences into an existing cognitive schema without changing the schema itself. Assimilation is the conservative movement of cognition — the world is made to fit existing categories. A child who calls a cat a 'dog' is assimilating the new creature into a familiar framework. In epistemological terms, assimilation is what happens when rupture has not yet occurred: the pressure of the new is absorbed into the old.",
-        thinkers: ["Piaget","Bachelard"],
-        tags: ["cognition","schema","learning","epistemology"],
-        connections: [
-          {to:"accommodation",label:"precedes, then yields to"},
-          {to:"equilibration",label:"balanced against"},
-          {to:"epistemological-obstacle",label:"perpetuated by"},
-          {to:"rupture",label:"broken by"},
-        ],
-        nuances: [
-          {thinker:"Piaget",note:"Piaget's foundational term: assimilation is one pole of a dialectic — the organism's tendency to incorporate the world into existing structures. Without it there is no continuity of understanding; with only it there is no growth."},
-          {thinker:"Bachelard connection",note:"Bachelard's epistemological obstacles are, in Piagetian terms, schemas so successfully assimilating that they prevent the accommodation needed for scientific progress."},
-        ],
-        x:340,y:560,color:"#fb923c",status:"consolidated",source:"paper",
-      },
-      {
-        id: "accommodation", term: "Accommodation",
-        definition: "The process by which a person or organisation modifies or creates a new cognitive schema in response to information that does not fit existing frameworks. Accommodation is the transformative movement of cognition — rather than the world being made to fit, the framework is remade to fit the world. It is the micro-level mechanism through which rupture is actualised: each accommodation is a small rupture; genuine rupture is accommodation at scale.",
-        thinkers: ["Piaget","Kuhn"],
-        tags: ["cognition","schema","transformation","learning"],
-        connections: [
-          {to:"assimilation",label:"follows from failure of"},
-          {to:"equilibration",label:"produces new"},
-          {to:"rupture",label:"micro-level instance of"},
-          {to:"islands-of-stability",label:"new schema is"},
-          {to:"enabling-constraining",label:"triggered by over-constraining"},
-        ],
-        nuances: [
-          {thinker:"Piaget",note:"Accommodation is triggered by disequilibrium — the felt cognitive discomfort when the world resists assimilation. The new schema that results is more adequate to the complexity encountered."},
-          {thinker:"Document",note:"The document identifies accommodation with building 'new models that accommodate to the new complexity that has emerged' — and rupture as the name for the moment when assimilation gives way to accommodation."},
-        ],
-        x:660,y:560,color:"#c084fc",status:"consolidated",source:"paper",
-      },
-      {
-        id: "equilibration", term: "Equilibration",
-        definition: "Piaget's term for the ongoing balancing process between assimilation and accommodation that drives cognitive development. When new experiences can be assimilated, the system is in equilibrium. When they cannot, the resulting cognitive discomfort — disequilibrium — motivates accommodation and growth toward a higher-order equilibrium. Equilibration is not a static balance but a dynamic, directional process: each new equilibrium is richer and more comprehensive than the last.",
-        thinkers: ["Piaget"],
-        tags: ["cognition","development","balance","dynamics"],
-        connections: [
-          {to:"assimilation",label:"balances"},
-          {to:"accommodation",label:"drives toward"},
-          {to:"opponent-processing",label:"parallel to"},
-        ],
-        nuances: [
-          {thinker:"Piaget",note:"Equilibration is Piaget's answer to the question of what drives development — not maturation alone, nor environment alone, but the self-regulating process by which the organism seeks ever more adequate ways of dealing with its world."},
-        ],
-        x:500,y:470,color:"#facc15",status:"consolidated",source:"paper",
-      },
-      {
-        id: "opponent-processing", term: "Opponent Processing",
-        definition: "A conceptual frame — borrowed from perceptual psychology but applied more broadly — in which opposing processes or forces produce stable output through their mutual tension. In colour vision, red and green opponent channels produce yellow through their interaction. Transposed to epistemology and social dynamics, opponent processing suggests that stability, creativity, or understanding may emerge not from the dominance of one force but from the sustained tension between opposed ones. Listed in the document as a node requiring further elaboration.",
-        thinkers: ["Hering (perceptual origin)","Hurvich","Jameson"],
-        tags: ["systems","tension","balance","cognition","dynamics"],
-        connections: [
-          {to:"equilibration",label:"parallel to"},
-          {to:"enabling-constraining",label:"enables/constrains as opponent pair"},
-          {to:"assimilation",label:"assimilation/accommodation as opponent pair"},
-        ],
-        nuances: [
-          {thinker:"Document",note:"Mentioned twice in the document without full elaboration — once in the foundational vocabulary and once in the closing node list. Its position suggests it is meant to provide a structural metaphor for how paired concepts (enabling/constraining, assimilation/accommodation) function together, each given meaning by the other."},
-          {thinker:"Broader application",note:"The opponent processing frame challenges resolution-as-goal: the aim is not to eliminate tension between opposites but to maintain productive tension. This connects directly to Pickering's 'mangle' — which is precisely productive resistance held in dynamic relation."},
-        ],
-        x:160,y:470,color:"#f472b6",status:"provisional",source:"paper",
-      },
-      {
-        id: "ontological-turn", term: "Ontological Turn",
-        definition: "The broader intellectual movement in STS and anthropology that shifts from asking 'how do different cultures represent the world?' to asking 'do different groups actually inhabit different worlds?' Rather than treating differences as competing interpretations of one reality, the ontological turn takes seriously the possibility of genuinely plural ontologies — not many perspectives on one nature, but many natures. This is Viveiros de Castro's 'multinaturalism' opposed to Euro-modern 'multiculturalism'.",
-        thinkers: ["Pickering","Viveiros de Castro","Latour","Mol"],
-        tags: ["ontology","anthropology","STS","epistemology","plurality"],
-        connections: [
-          {to:"episteme",label:"related to"},
-          {to:"performative-idiom",label:"requires"},
-          {to:"islands-of-stability",label:"each ontology as"},
-          {to:"summoning",label:"different ontologies accessed by"},
-        ],
-        nuances: [
-          {thinker:"Viveiros de Castro",note:"Multinaturalism: where Euro-modernism assumes one nature and many cultures (multiculturalism), Amerindian perspectivism assumes one culture — intentional beings relating to their worlds — and many natures."},
-          {thinker:"Latour",note:"In We Have Never Been Modern, Latour argues that the modern constitution performs a purification — separating Nature from Culture — and then exports this framework as universal. The claim to be a meta-ontology is itself Euro-modernism's most provincial move."},
-        ],
-        x:720,y:300,color:"#4ade80",status:"consolidated",source:"paper",
-      },
-      {
-        id: "performative-idiom", term: "Performative Idiom",
-        definition: "Pickering's key methodological shift: away from a 'representational idiom' — where knowledge claims are evaluated as true or false descriptions of a fixed world — toward a 'performative idiom', where humans and nonhumans are understood as acting and becoming in the world rather than merely depicting it. In the performative view, science and shamanism are not competing descriptions of one nature but different ways of doing and engaging with a lively world. The shift is not only in which words are used but in how language is organised — organised for performance rather than depiction.",
-        thinkers: ["Pickering"],
-        tags: ["STS","ontology","performance","epistemology","methodology"],
-        connections: [
-          {to:"ontological-turn",label:"operationalises"},
-          {to:"dances-of-agency",label:"described through"},
-          {to:"islands-of-stability",label:"produces"},
-          {to:"rupture",label:"offers alternative account of"},
-        ],
-        nuances: [
-          {thinker:"Pickering",note:"The representational idiom asks: 'Is this knowledge true?' The performative idiom asks: 'What does this knowledge do?' The shift is from a correspondence theory of truth to a theory of practice and engagement."},
-          {thinker:"Document",note:"The document notes that the performative idiom is not just about new vocabulary but about a different organisation of language — one structured for performance. This parallels the distinction between describing a dance and dancing."},
-        ],
-        x:720,y:420,color:"#38bdf8",status:"consolidated",source:"paper",
-      },
-      {
-        id: "islands-of-stability", term: "Islands of Stability",
-        definition: "Pickering's concept for relatively stabilised configurations of humans, nonhumans, and practices that hold together — achievements, not givens. Both a physics laboratory and a shamanic ritual can be understood as islands of stability, each tuned into a different 'lively nature'. Islands of stability are what rupture and accommodation produce: after a crisis, a new configuration achieves stability. They are always provisional — held together by ongoing practice — and always potentially disruptable.",
-        thinkers: ["Pickering"],
-        tags: ["STS","stability","ontology","practice","systems"],
-        connections: [
-          {to:"rupture",label:"produced after"},
-          {to:"accommodation",label:"new schema stabilises as"},
-          {to:"ontological-turn",label:"each ontology as"},
-          {to:"performative-idiom",label:"product of"},
-          {to:"summoning",label:"accessed through"},
-          {to:"enabling-constraining",label:"configurations of"},
-        ],
-        nuances: [
-          {thinker:"Pickering",note:"Islands of stability enable comparison between science and shamanism not as competing truth-claims but as different achieved configurations — both are real, both are productive of their respective worlds."},
-          {thinker:"Connection to rupture",note:"A rupture destroys one island of stability and makes possible another. The period of crisis (Kuhn's revolutionary science, Piaget's disequilibrium) is precisely the interval between islands."},
-        ],
-        x:500,y:160,color:"#f59e0b",status:"consolidated",source:"paper",
-      },
-      {
-        id: "summoning", term: "Summoning",
-        definition: "The capacity of different skills, practices, settings, people, groups, and schemas to call forth or activate different elements across different ontologies. Summoning is not mere access or retrieval — it is the way in which the context of engagement shapes what is real, present, and active. A physics laboratory summons certain nonhuman agencies; a shamanic ritual summons others. The concept implies that what is available depends on what kind of island of stability one inhabits.",
-        thinkers: ["Pickering"],
-        tags: ["ontology","practice","STS","activation"],
-        connections: [
-          {to:"islands-of-stability",label:"accesses through"},
-          {to:"ontological-turn",label:"different ontologies accessed by"},
-          {to:"dances-of-agency",label:"mechanism of"},
-          {to:"performative-idiom",label:"exemplifies"},
-        ],
-        nuances: [
-          {thinker:"Document",note:"Summoning is listed in the closing nodes alongside Pickering without full elaboration, suggesting it is still developing. Its force is in connecting the ontological turn to practice: different ways of being summon different worlds into actuality."},
-        ],
-        x:840,y:300,color:"#f472b6",status:"provisional",source:"paper",
-      },
-      {
-        id: "dances-of-agency", term: "Dances of Agency",
-        definition: "From Pickering's The Mangle of Practice: the concept describes how human and nonhuman agencies interweave in open-ended, back-and-forth processes. Knowledge is bound up with and transformed in these performative dances — humans extend a project, nonhumans resist or accommodate, humans adjust, and so on indefinitely. Agency is not located in any single actor but emerges from the dance itself. The concept directly challenges both strong social constructionism (humans determine knowledge) and naive realism (nature determines knowledge).",
-        thinkers: ["Pickering"],
-        tags: ["STS","agency","practice","ontology","process"],
-        connections: [
-          {to:"performative-idiom",label:"described through"},
-          {to:"decentered-becoming",label:"mechanism of"},
-          {to:"enabling-constraining",label:"describes dynamics of"},
-          {to:"summoning",label:"mechanism of"},
-          {to:"islands-of-stability",label:"produces through iteration"},
-        ],
-        nuances: [
-          {thinker:"Pickering",note:"In detailed case studies in physics and mathematics, Pickering shows that scientific knowledge is not discovered (realism) or constructed (constructivism) but mangled — shaped in the open-ended, unpredictable dance between human intention and material resistance."},
-        ],
-        x:840,y:420,color:"#34d399",status:"consolidated",source:"paper",
-      },
-      {
-        id: "decentered-becoming", term: "Decentered Becoming",
-        definition: "Pickering's description of the ontological character of the world as understood through the performative idiom: 'an indefinite multiplicity of performative entities endlessly becoming in decentered and emergent dances of agency.' Decentered means there is no fixed centre or subject driving events — agency is distributed and emergent, not located in any single actor. Becoming means that entities are not fixed substances but processes; they are what they do in relation to other entities.",
-        thinkers: ["Pickering","Whitehead (resonance)","Deleuze (resonance)"],
-        tags: ["ontology","process","emergence","STS","becoming"],
-        connections: [
-          {to:"dances-of-agency",label:"described through"},
-          {to:"performative-idiom",label:"ontological consequence of"},
-          {to:"ontological-turn",label:"implication of"},
-        ],
-        nuances: [
-          {thinker:"Pickering",note:"Decentered becoming is the ontological backdrop of the performative idiom: if the world is always becoming through distributed dances of agency, then any stable configuration — any island of stability — is a local achievement against an ongoing flux."},
-          {thinker:"Resonances",note:"Decentered becoming resonates with Whitehead's process philosophy and Deleuze's philosophy of difference — but emerges in Pickering from empirical STS work rather than speculative metaphysics."},
-        ],
-        x:840,y:540,color:"#818cf8",status:"consolidated",source:"paper",
-      },
-      {
-        id: "open-ended-learning", term: "Open-Ended Learning",
-        definition: "Learning that is not overly shaped or constrained by institutional requirements — whether regulative, normative, or cognitive. Open-ended learning preserves the capacity for accommodation: it does not pre-determine what schema a learner must arrive at, but holds space for genuine disequilibrium and genuine transformation. It is contrasted implicitly with learning that only allows assimilation — absorbing new content into pre-given frameworks without changing the framework.",
-        thinkers: [],
-        tags: ["learning","education","institution","openness"],
-        connections: [
-          {to:"transdisciplinarity",label:"requires"},
-          {to:"social-imaginary",label:"enables"},
-          {to:"accommodation",label:"makes space for"},
-          {to:"rupture",label:"prepares for"},
-        ],
-        nuances: [
-          {thinker:"Document",note:"Listed under 'Knowledge production, science, and learning' — positioned as the epistemic ideal corresponding to the social ideal of Creative Integration. Both resist functional differentiation as an organising logic."},
-        ],
-        x:160,y:160,color:"#fb923c",status:"provisional",source:"paper",
-      },
-    ],
-  },
-  vienna: {
-    id: "vienna", label: "Viennese Aesthetic Vocabulary",
-    subtitle: "1860–1910 — Art, Craft & Urban Form",
-    accent: "#f59e0b", storageKey: "semantic-network-vienna",
-    initialNodes: [
-      { id:"gesamtkunstwerk", term:"Gesamtkunstwerk",
-        definition:"The integration of all artistic disciplines — architecture, interior, furniture, graphics, objects — into a unified aesthetic whole. Originating in Wagnerian aesthetics, in Vienna the term became a social philosophy: the fragmentation of style was seen to reflect the fragmentation of modern life itself. A unified aesthetic environment was thus both an artistic and a moral ambition.",
-        thinkers:["Wagner","Hoffmann","Moser","Klimt"], tags:["design","unity","modernity","social"],
-        connections:[{to:"stil",label:"requires"},{to:"lebensform",label:"shapes"},{to:"kunstgewerbe",label:"elevates"},{to:"ornament",label:"contested by Loos"},{to:"wiener-werkstaette",label:"institutionalised in"},{to:"sitte-stadtbild",label:"urban parallel"}],
-        nuances:[{thinker:"Secession",note:"For the Secessionists, Gesamtkunstwerk meant dissolving the hierarchy between fine art and applied art — no object too small to deserve artistic care."},{thinker:"Wiener Werkstätte",note:"Hoffmann and Moser pursued a total aesthetic environment, designing everything from buildings to cutlery, but the movement's expense risked turning reform into elite luxury."},{thinker:"Loos",note:"Loos violently rejected the Gesamtkunstwerk ethos, arguing in Ornament and Crime that decorative integration was cultural regression rather than progress."}],
-        x:350,y:420,color:"#f59e0b",status:"consolidated",source:"manual" },
-      { id:"kunstgewerbe", term:"Kunstgewerbe",
-        definition:"Applied or decorative art — the broad field of craft-based objects made with aesthetic intention: furniture, ceramics, textiles, metalwork, bookbinding. In Vienna from the 1860s, Kunstgewerbe became a reform project: if industrial production was inevitable, then elevating the taste embedded in everyday objects could civilize capitalism and shape the moral condition of a society.",
-        thinkers:["Eitelberger","Hoffmann","Moser"], tags:["craft","reform","industry","education"],
-        connections:[{to:"materialgerechtigkeit",label:"governed by"},{to:"stilbildung",label:"requires"},{to:"formgefuehl",label:"cultivates"},{to:"gesamtkunstwerk",label:"absorbed into"},{to:"mak",label:"institutionalised at"}],
-        nuances:[{thinker:"Eitelberger / MAK",note:"The Museum für Kunst und Industrie framed Kunstgewerbe as a liberal bourgeois civilizing project: train craftsmen in taste, and industrial society can be redeemed."},{thinker:"Wiener Werkstätte",note:"Hoffmann and Moser radicalised the concept — not reform of mass production but the creation of hand-made objects of complete artistic integrity."}],
-        x:800,y:500,color:"#fb923c",status:"consolidated",source:"manual" },
-      { id:"stil", term:"Stil",
-        definition:"Style as a total principle — not mere surface decoration but the coherent formal language that unifies all expressions of a historical moment or a designed environment. For Vienna's reformers, the absence of a genuine modern Stil was the symptom of cultural crisis. Finding or inventing one adequate to modern life was the central task of art, architecture, and design.",
-        thinkers:["Semper","Riegl","Hoffmann","Klimt"], tags:["form","history","modernity","coherence"],
-        connections:[{to:"gesamtkunstwerk",label:"unified by"},{to:"stilbildung",label:"cultivated through"},{to:"kunstwollen",label:"driven by"},{to:"ornament",label:"expressed in"}],
-        nuances:[{thinker:"Semper",note:"Gottfried Semper argued each historical epoch produces its own integral style from material, technique, and social function — a style cannot be arbitrarily chosen."},{thinker:"Riegl",note:"Riegl's Stilfragen traced the autonomous formal evolution of ornamental style, resisting reductive material or functional explanations."}],
-        x:500,y:130,color:"#facc15",status:"consolidated",source:"manual" },
-      { id:"kunstwollen", term:"Kunstwollen",
-        definition:"Literally 'art-will' or 'artistic volition' — Alois Riegl's concept for the inner purposive drive that shapes the formal character of art in a given time and place. Kunstwollen resists reduction: it is neither material determinism nor imitation of nature, but an autonomous creative impulse that produces specific formal solutions. Every age has its own Kunstwollen, which gives its art integrity even when judged 'primitive' by other standards.",
-        thinkers:["Riegl"], tags:["theory","form","will","history"],
-        connections:[{to:"stil",label:"produces"},{to:"ornament",label:"manifests in"},{to:"materialgerechtigkeit",label:"in tension with"},{to:"stilbildung",label:"historically expresses"}],
-        nuances:[{thinker:"Riegl",note:"Introduced in Stilfragen (1893) and developed in Spätrömische Kunstindustrie (1901). Kunstwollen opposes Semper's materialist theory — form is not determined by technique or function but by an inner artistic will."}],
-        x:500,y:280,color:"#4ade80",status:"consolidated",source:"manual" },
-      { id:"materialgerechtigkeit", term:"Materialgerechtigkeit",
-        definition:"Material honesty or material fidelity — the principle that the formal treatment of an object should be truthful to the nature of its material. Wood should look and behave like wood; stone like stone; metal like metal. Violation of this principle was treated as both aesthetic failure and moral dishonesty. It became a cornerstone of Vienna's applied arts reform.",
-        thinkers:["Semper","Eitelberger","Hoffmann"], tags:["craft","ethics","form","material"],
-        connections:[{to:"kunstgewerbe",label:"grounds"},{to:"formgefuehl",label:"trained alongside"},{to:"ornament",label:"constrains"},{to:"stil",label:"contributes to"}],
-        nuances:[{thinker:"Semper",note:"Semper's material theory of style saw each craft technique — weaving, ceramics, carpentry — as generating specific formal possibilities. Honesty to material was structural, not merely ethical."}],
-        x:670,y:560,color:"#34d399",status:"consolidated",source:"manual" },
-      { id:"stilbildung", term:"Stilbildung",
-        definition:"Style-formation or taste-cultivation — the educational and social process through which sensitivity to coherent formal language is developed in craftsmen, designers, and the public. For museum reformers, Stilbildung was the practical goal: through drawing classes, museum collections, and workshops, the capacities for aesthetic judgment could be trained into a population.",
-        thinkers:["Eitelberger","MAK reformers"], tags:["education","reform","taste","craft"],
-        connections:[{to:"kunstgewerbe",label:"aims to elevate"},{to:"formgefuehl",label:"develops"},{to:"mak",label:"pursued at"},{to:"stil",label:"towards"}],
-        nuances:[{thinker:"MAK reformers",note:"The founding logic of the Österreichisches Museum für Kunst und Industrie: display exemplary historical craft objects so that students and craftsmen absorb formal principles by looking."}],
-        x:650,y:420,color:"#38bdf8",status:"consolidated",source:"manual" },
-      { id:"formgefuehl", term:"Formgefühl",
-        definition:"Feeling for form — an aesthetic sensibility or intuition that allows a craftsman or designer to judge the rightness of formal decisions. Not reducible to rules, Formgefühl is a cultivated capacity, something between instinct and trained judgment. The concept marks the limits of rationalist design theory: ultimately form-giving requires a felt, embodied sense that cannot be fully codified.",
-        thinkers:["Semper","Riegl","Eitelberger"], tags:["sensibility","craft","embodiment","judgment"],
-        connections:[{to:"materialgerechtigkeit",label:"applied through"},{to:"stilbildung",label:"cultivated by"},{to:"kunstgewerbe",label:"essential to"},{to:"lebensform",label:"embedded in"}],
-        nuances:[{thinker:"Semper",note:"In Der Stil, Semper treats Formgefühl as the tacit dimension of craft knowledge — the accumulated wisdom of making that exceeds verbal instruction."}],
-        x:300,y:200,color:"#818cf8",status:"consolidated",source:"manual" },
-      { id:"ornament", term:"Ornament",
-        definition:"Decorative form applied to or integrated into objects, surfaces, and buildings. In Vienna, ornament was the central contested terrain: for Riegl, ornament expressed autonomous formal will; for Semper, it was grounded in material technique; for the Secessionists, it was the vehicle of aesthetic unity; for Loos, it was crime — the mark of cultural degeneracy and wasted labour.",
-        thinkers:["Riegl","Semper","Klimt","Loos","Hoffmann"], tags:["form","decoration","controversy","modernity"],
-        connections:[{to:"kunstwollen",label:"expresses"},{to:"gesamtkunstwerk",label:"unifies in"},{to:"materialgerechtigkeit",label:"constrained by"},{to:"loos-kritik",label:"condemned in"},{to:"stil",label:"vehicle of"}],
-        nuances:[{thinker:"Riegl",note:"Stilfragen (1893) traces a continuous formal evolution of ornament across cultures, arguing its logic is autonomous — not derived from nature or technique but from inner formal will."},{thinker:"Loos",note:"Ornament and Crime (1908): ornament is cultural regression. The modern person has overcome the need to decorate surfaces."},{thinker:"Secession",note:"For Klimt and the Secessionists, ornament was not regressive but the very medium through which psychological depth and aesthetic unity could be achieved."}],
-        x:700,y:200,color:"#f472b6",status:"consolidated",source:"manual" },
-      { id:"lebensform", term:"Lebensform",
-        definition:"Form of life — the idea that aesthetic choices are not separable from the way a person or community lives. A coherent Lebensform means that artistic sensibility permeates daily existence: the home, clothing, social rituals, urban environment. For Vienna's art reformers, the goal was not merely beautiful objects but a beautiful and unified mode of life.",
-        thinkers:["Hoffmann","Secession","Wiener Werkstätte"], tags:["life","unity","social","ethics"],
-        connections:[{to:"gesamtkunstwerk",label:"realised through"},{to:"formgefuehl",label:"rooted in"},{to:"wiener-werkstaette",label:"pursued by"},{to:"sitte-stadtbild",label:"extended into city"}],
-        nuances:[{thinker:"Wiener Werkstätte",note:"Hoffmann and Moser designed the complete environment — from building to spoon — because coherent Lebensform required no aesthetic gap between architecture and daily utensil."}],
-        x:100,y:470,color:"#c084fc",status:"consolidated",source:"manual" },
-      { id:"wiener-werkstaette", term:"Wiener Werkstätte",
-        definition:"The Vienna Workshops — founded 1903 by Josef Hoffmann and Koloman Moser. The Werkstätte attempted to realise a complete aesthetic environment: furniture, textiles, metalwork, ceramics, clothing, books. It embodied the ideal of craft integrity and artistic unity, but its objects were expensive and its clientele wealthy — a persistent tension between social reform ambitions and elite luxury production.",
-        thinkers:["Hoffmann","Moser"], tags:["institution","craft","design","reform"],
-        connections:[{to:"gesamtkunstwerk",label:"institutionalises"},{to:"kunstgewerbe",label:"radicalises"},{to:"lebensform",label:"pursues"},{to:"secession",label:"emerges from"}],
-        nuances:[{thinker:"Hoffmann",note:"The Werkstätte programme: 'We want to establish intimate contact between public, designer, and craftsman.' But the price of hand-craft made this public largely the Viennese upper bourgeoisie."}],
-        x:180,y:500,color:"#fb923c",status:"consolidated",source:"manual" },
-      { id:"secession", term:"Secession",
-        definition:"The Vienna Secession — founded 1897, when Klimt, Hoffmann, Moser and others broke from the conservative Künstlerhaus. Its motto 'Der Zeit ihre Kunst, der Kunst ihre Freiheit' expressed its double ambition: a new style adequate to modernity, and freedom from academic hierarchy. It explicitly dissolved the boundary between fine and applied art.",
-        thinkers:["Klimt","Hoffmann","Moser","Olbrich"], tags:["institution","avant-garde","modernity","reform"],
-        connections:[{to:"gesamtkunstwerk",label:"pursues"},{to:"stil",label:"seeks new"},{to:"wiener-werkstaette",label:"generates"},{to:"loos-kritik",label:"criticised by"}],
-        nuances:[{thinker:"Klimt",note:"Klimt's Beethoven Frieze (1902) was the movement's most complete Gesamtkunstwerk experiment — painting, architecture, music, and sculpture unified for a single exhibition."}],
-        x:160,y:360,color:"#4ade80",status:"consolidated",source:"manual" },
-      { id:"mak", term:"MAK / Museum für Kunst und Industrie",
-        definition:"The Österreichisches Museum für Kunst und Industrie (today the MAK), founded 1864 by Rudolf von Eitelberger — the first applied arts museum in the German-speaking world, modelled on the V&A in London. Its founding logic: display historical craft masterworks so that designers and craftsmen absorb their formal principles through direct encounter.",
-        thinkers:["Eitelberger"], tags:["institution","education","reform","history"],
-        connections:[{to:"kunstgewerbe",label:"promotes"},{to:"stilbildung",label:"enables"},{to:"materialgerechtigkeit",label:"teaches"}],
-        nuances:[{thinker:"Eitelberger",note:"Eitelberger was a liberal bourgeois art historian who believed the state had a duty to cultivate taste — the museum as pedagogical instrument for the modernization of craft."}],
-        x:900,y:390,color:"#38bdf8",status:"consolidated",source:"manual" },
-      { id:"sitte-stadtbild", term:"Stadtbild / Sitte",
-        definition:"Camillo Sitte's conception of the city as an artistically composed visual whole — analysed in Städtebau nach seinen künstlerischen Grundsätzen (1889). Sitte treated the historic city as a painter treats a composition: spatial enclosure, visual sequence, the irregular placement of monuments within plazas. Though he never uses 'Gesamtkunstwerk', he treats the city as a unified artistic organism grown through time.",
-        thinkers:["Sitte"], tags:["urbanism","space","history","composition"],
-        connections:[{to:"gesamtkunstwerk",label:"urban parallel to"},{to:"lebensform",label:"spatial dimension of"},{to:"stil",label:"historically embedded"},{to:"ringstrasse",label:"critique of"}],
-        nuances:[{thinker:"Sitte",note:"Sitte's model is emergent and historical; the Secessionists' is consciously designed and programmatic. Both treat the built environment as aesthetic totality, but by opposite methods."}],
-        x:780,y:570,color:"#facc15",status:"consolidated",source:"manual" },
-      { id:"loos-kritik", term:"Loos / Ornament and Crime",
-        definition:"Adolf Loos's radical counter-position to the Viennese aesthetic reform consensus — crystallised in his 1908 essay Ornament und Verbrechen. Loos argued that ornament is not cultural richness but cultural lag: the impulse to decorate belongs to primitive and criminal psychology. Modern culture means restraint, the separation of art from everyday utility, and the embrace of plain, functional surfaces.",
-        thinkers:["Loos"], tags:["critique","modernity","rupture","design"],
-        connections:[{to:"ornament",label:"condemns"},{to:"gesamtkunstwerk",label:"rejects"},{to:"secession",label:"breaks from"},{to:"materialgerechtigkeit",label:"shares concern with"}],
-        nuances:[{thinker:"Loos",note:"Paradoxically, Loos shared the reform movement's concern for material honesty, but drew the opposite conclusion: strip ornament away entirely rather than refining it."}],
-        x:500,y:560,color:"#f472b6",status:"consolidated",source:"manual" },
-      { id:"ringstrasse", term:"Ringstraße",
-        definition:"Vienna's monumental boulevard constructed from the 1860s onward — a planned urban ensemble of historicist public buildings intended to represent imperial civic identity. For Vienna's reform generation, the Ringstraße became the symbol of everything wrong: historical eclecticism, stylistic pastiche, surface spectacle without genuine cultural unity.",
-        thinkers:["Sitte (critic)","Loos (critic)","Secession (reaction)"], tags:["urbanism","history","eclecticism","critique"],
-        connections:[{to:"sitte-stadtbild",label:"critiqued by"},{to:"stil",label:"lacks genuine"},{to:"loos-kritik",label:"symptom addressed by"},{to:"secession",label:"provokes"}],
-        nuances:[{thinker:"Schorske",note:"Carl Schorske's Fin-de-Siècle Vienna reads the Ringstraße as the liberal bourgeoisie's self-representation in stone — and the aesthetic revolt of the 1890s as a generational rejection of that image."}],
-        x:940,y:210,color:"#818cf8",status:"consolidated",source:"manual" },
-      { id:"kunstgenuss", term:"Kunstgenuss",
-        definition:"Art-enjoyment or art-pleasure — the felt, bodily experience of aesthetic absorption in a work. In the Vienna reform context the term carried ethical weight — if the objects and environments of daily life were well made, Kunstgenuss would become democratically available, not confined to the museum.",
-        thinkers:["Eitelberger","Riegl","Secession"], tags:["aesthetics","pleasure","experience","sensibility"],
-        connections:[{to:"kunstwollen",label:"felt response to"},{to:"formgefuehl",label:"related to"},{to:"lebensform",label:"enriches"},{to:"zweckfreiheit",label:"enabled by"}],
-        nuances:[{thinker:"Riegl",note:"Riegl's formal analysis of art is ultimately in service of recovering Kunstgenuss — the goal of art history is to make us feel again what earlier cultures felt when they produced their forms."}],
-        x:750,y:310,color:"#f472b6",status:"consolidated",source:"manual" },
-      { id:"kunsterlebnis", term:"Kunsterlebnis",
-        definition:"Art-experience — a more phenomenologically weighted term than Kunstgenuss, emphasising the lived, temporal encounter with a work rather than the pleasure it yields. Kunsterlebnis implies that genuine engagement with art transforms the one who undergoes it: it is an event, not merely a sensation.",
-        thinkers:["Dilthey","Gadamer","Secession"], tags:["aesthetics","experience","phenomenology","transformation"],
-        connections:[{to:"kunstgenuss",label:"deepens into"},{to:"lebensform",label:"shapes"},{to:"gesamtkunstwerk",label:"produced by"},{to:"zweckfreiheit",label:"requires"}],
-        nuances:[{thinker:"Gadamer",note:"Gadamer inherits the term and radicalises it: the Kunsterlebnis is not a private psychological event but a claim the work makes on us — an encounter that reorganises our understanding."}],
-        x:800,y:160,color:"#818cf8",status:"consolidated",source:"manual" },
-      { id:"zweckfreiheit", term:"Zweckfreiheit",
-        definition:"Freedom from purpose — the Kantian idea that genuine aesthetic experience involves a suspension of instrumental thinking, a contemplation of form for its own sake rather than for any end it serves.",
-        thinkers:["Kant","Schiller","Secession","Hoffmann"], tags:["aesthetics","freedom","autonomy","making"],
-        connections:[{to:"kunstgenuss",label:"enables"},{to:"kunsterlebnis",label:"condition of"},{to:"secession",label:"declared by"},{to:"gesamtkunstwerk",label:"animates"}],
-        nuances:[{thinker:"Kant",note:"Kant's Critique of Judgment: the beautiful pleases without concept and without interest — Zweckfreiheit (purposiveness without purpose) is the formal structure of this disinterested pleasure."}],
-        x:250,y:130,color:"#facc15",status:"consolidated",source:"manual" },
-      { id:"grossstadt", term:"Grossstadt",
-        definition:"The metropolis — the great city as a qualitatively new form of human experience. Around 1900 in German-speaking culture, Grossstadt named both an empirical fact and a contested aesthetic question: whether the modern city could become a unified artistic whole. Otto Wagner's position — that the Grossstadt demands and makes possible a new artistic vision at the level of the entire urban plan — is the foreground of this node.",
-        thinkers:["Otto Wagner","Sitte","Simmel","Toennies","Loos"], tags:["urbanism","modernity","planning","vision"],
-        connections:[{to:"ringstrasse",label:"supersedes"},{to:"sitte-stadtbild",label:"diverges from"},{to:"gesamtkunstwerk",label:"scales up to city"},{to:"lebensform",label:"shapes at urban scale"}],
-        nuances:[{thinker:"Otto Wagner",note:"In Moderne Architektur (1895), Wagner argues that only an artist — not an engineer or bureaucrat — can give the expanding metropolis its necessary form."},{thinker:"Simmel",note:"Georg Simmel's Die Grossstadt und das Geistesleben (1903): the metropolis produces the blasé type — a person who has deadened their responses to survive overstimulation."}],
-        x:940,y:470,color:"#38bdf8",status:"consolidated",source:"manual" },
-      { id:"beethoven-frieze", term:"Beethoven Frieze (Klimt, 1902)",
-        definition:"Gustav Klimt's monumental wall painting created for the 14th Secession exhibition, 1902 — designed as a temporary work, intended to be destroyed after the exhibition closed. The Frieze is the most concentrated single artifact in which the Vienna network's tensions become visible: Gesamtkunstwerk within Gesamtkunstwerk, ornament as psychological language, the dissolution of fine and decorative art.",
-        thinkers:["Klimt","Beethoven (source)","Schiller (via Beethoven)","Wagner (Gesamtkunstwerk concept)"], tags:["artifact","ornament","narrative","aesthetics","process"],
-        connections:[{to:"gesamtkunstwerk",label:"exemplifies within"},{to:"secession",label:"centrepiece of 1902 exhibition"},{to:"ornament",label:"deploys as psychological language"},{to:"kunsterlebnis",label:"designed to produce"}],
-        nuances:[{thinker:"Process / Temporality",note:"The Frieze was designed to be temporary — Gesamtkunstwerk as event rather than object. Its accidental survival changes its meaning."}],
-        x:360,y:560,color:"#f59e0b",status:"consolidated",source:"manual" },
-      { id:"gemischter-satz", term:"Gemischter Satz",
-        definition:"The indigenous Viennese field-blend wine — grown on the hills within the city boundary, pressed from many grape varieties harvested together. As a cultural form, Gemischter Satz embodies a social philosophy antithetical to the Gesamtkunstwerk's controlled aesthetic totality: its beauty is unplanned, emergent from mixture rather than unified vision.",
-        thinkers:["Viennese folk culture","Schorske (social context)"], tags:["culture","social","wine","city"],
-        connections:[{to:"kaffeehausleben",label:"counterpart to"},{to:"lebensform",label:"popular form of"},{to:"gesamtkunstwerk",label:"informal counterpoint to"}],
-        nuances:[{thinker:"Unplanned totality",note:"Gemischter Satz achieves unity without a guiding artistic will. The blend emerges from cohabitation over time, not design."}],
-        x:180,y:200,color:"#4ade80",status:"consolidated",source:"manual" },
-      { id:"schmaeh", term:"Schmaeh",
-        definition:"An untranslatable Viennese mode of social interaction — not quite irony, not quite charm, not quite cynicism, but a way of holding warmth and detachment simultaneously. Schmaeh says serious things through apparent lightness; it deflects sentimentality without becoming cold.",
-        thinkers:["Karl Kraus","Nestroy","Freud (jokes)","Thomas Bernhard"], tags:["culture","language","irony","social"],
-        connections:[{to:"kaffeehausleben",label:"performed in"},{to:"wiener-gemutlichkeit",label:"unsettles"},{to:"loos-kritik",label:"shares mode with"},{to:"dekadenz",label:"coping response to"}],
-        nuances:[{thinker:"Karl Kraus",note:"Kraus's satirical method in Die Fackel is Schmaeh elevated to literary form — the deadpan quotation of an opponent's words as the most devastating critique."}],
-        x:120,y:260,color:"#facc15",status:"consolidated",source:"manual" },
-      { id:"kaffeehausleben", term:"Kaffeehausleben",
-        definition:"Coffeehouse life — the social institution through which Viennese intellectual, artistic, and political culture actually reproduced itself. The Viennese Kaffeehaus was simultaneously an office, salon, postal address, reading room, and debating chamber.",
-        thinkers:["Karl Kraus","Altenberg","Trotsky","Herzl","Klimt"], tags:["culture","institution","social","language"],
-        connections:[{to:"gemischter-satz",label:"counterpart to"},{to:"schmaeh",label:"primary venue of"},{to:"secession",label:"social substrate of"},{to:"lebensform",label:"defines Viennese"}],
-        nuances:[{thinker:"Social function",note:"The Kaffeehaus solved a specific Viennese problem: apartments were small and cold, but the coffeehouse was warm, spacious, and cheap."}],
-        x:100,y:370,color:"#fb923c",status:"consolidated",source:"manual" },
-      { id:"wiener-gemutlichkeit", term:"Wiener Gemutlichkeit",
-        definition:"Viennese cosiness or conviviality — the quality of social warmth, unhurried ease, and pleasurable togetherness. But it has a profound underside: Gemutlichkeit as cultural anaesthetic, as the specifically Viennese talent for making the unbearable comfortable, for conducting the business of decline in a pleasant tone of voice.",
-        thinkers:["Karl Kraus","Bernhard","Canetti","Zweig"], tags:["culture","social","atmosphere","critique"],
-        connections:[{to:"schmaeh",label:"expressed through"},{to:"kaffeehausleben",label:"cultivated in"},{to:"dekadenz",label:"masks"},{to:"lebensform",label:"popular version of"}],
-        nuances:[{thinker:"Karl Kraus",note:"Kraus saw Gemutlichkeit as Vienna's most dangerous quality: it was the cultural solvent that dissolved all serious distinctions."}],
-        x:120,y:160,color:"#34d399",status:"consolidated",source:"manual" },
-      { id:"ringstrasse-gesellschaft", term:"Ringstrasse-Gesellschaft",
-        definition:"Ringstraße society — the specific social formation that built the boulevard, commissioned its institutions, and constituted the dominant cultural public of late nineteenth-century Vienna: the liberal upper bourgeoisie, largely but not exclusively Jewish.",
-        thinkers:["Schorske","Zweig","Freud","Mahler","Schnitzler"], tags:["social","class","history","institution"],
-        connections:[{to:"ringstrasse",label:"built and inhabited"},{to:"secession",label:"patronised and was challenged by"},{to:"wiener-gemutlichkeit",label:"performed"},{to:"dekadenz",label:"symptom of exhaustion of"}],
-        nuances:[{thinker:"Schorske",note:"Schorske's Fin-de-Siecle Vienna argues that the Ringstrasse-Gesellschaft's turn to aestheticism was a response to political failure."}],
-        x:870,y:130,color:"#818cf8",status:"consolidated",source:"manual" },
-      { id:"dekadenz", term:"Dekadenz / Fin-de-siecle Stimmung",
-        definition:"Decadence and the mood of the fin de siecle — the pervasive sense in Vienna around 1890-1910 of civilisational lateness, of living at an ending, of hypercultivation as simultaneously the highest achievement and the surest sign of exhaustion.",
-        thinkers:["Hofmannsthal","Schnitzler","Klimt","Nietzsche","Schorske"], tags:["culture","history","atmosphere","crisis","modernity"],
-        connections:[{to:"ringstrasse-gesellschaft",label:"experienced by"},{to:"wiener-gemutlichkeit",label:"concealed by"},{to:"secession",label:"aesthetic response to"},{to:"gesamtkunstwerk",label:"intensified pursuit of"}],
-        nuances:[{thinker:"Hofmannsthal",note:"Hugo von Hofmannsthal's Ein Brief (1902) is the canonical text of Viennese Dekadenz: a fictional letter describing complete loss of faith in language."}],
-        x:780,y:130,color:"#f87171",status:"consolidated",source:"manual" },
-    ],
-  },
-  apocalyptic: {
-    id:"apocalyptic", label:"Apocalyptic Ethics",
-    subtitle:"End Times, Moral Urgency & the Politics of Catastrophe",
-    accent:"#f87171", storageKey:"semantic-network-apocalyptic",
-    initialNodes: [
-      { id:"apocalypse", term:"Apocalypse",
-        definition:"From the Greek apokalypsis — an unveiling or revelation. In its original theological sense, apocalypse does not mean destruction but disclosure: the pulling back of a veil to reveal a deeper truth about the world and its condition. In secular modernity the term has migrated toward catastrophe and ending, but the ethical dimension of revelation — crisis making visible what was previously hidden — remains central to apocalyptic thinking across traditions.",
-        thinkers:["John of Patmos","Benjamin","Derrida","Zizek"], tags:["theology","revelation","crisis","modernity"],
-        connections:[{to:"eschatology",label:"structured by"},{to:"katechon",label:"held back by"},{to:"moral-urgency",label:"generates"},{to:"witness",label:"demands"}],
-        nuances:[{thinker:"Benjamin",note:"Walter Benjamin's 'now of recognisability' treats apocalyptic moments as ruptures in homogeneous historical time."},{thinker:"Derrida",note:"For Derrida, the apocalyptic tone in philosophy is always a call — an injunction demanding a response."}],
-        x:500,y:280,color:"#f87171",status:"consolidated",source:"manual" },
-      { id:"eschatology", term:"Eschatology",
-        definition:"The study or doctrine of last things — death, judgment, the end of history, final states. In theological traditions, eschatology structures the meaning of present action by reference to an ultimate horizon. In secular and political thought eschatological structures persist: the idea that history has a direction, that the present moment is critical.",
-        thinkers:["Moltmann","Pannenberg","Lowith","Agamben"], tags:["theology","history","time","politics"],
-        connections:[{to:"apocalypse",label:"frames"},{to:"katechon",label:"includes"},{to:"moral-urgency",label:"grounds"},{to:"messianism",label:"related to"}],
-        nuances:[{thinker:"Lowith",note:"Karl Lowith's Meaning in History argues that modern secular philosophies of progress are secularised eschatologies."}],
-        x:720,y:180,color:"#fb923c",status:"consolidated",source:"manual" },
-      { id:"katechon", term:"Katechon",
-        definition:"From Paul's Second Letter to the Thessalonians — the restrainer that holds back the end of history. In political theology it has described the Roman Empire, the Church, the sovereign state, and secular modernity itself as structures that defer the final reckoning.",
-        thinkers:["Paul","Schmitt","Agamben","Taubes"], tags:["theology","politics","power","delay"],
-        connections:[{to:"apocalypse",label:"restrains"},{to:"eschatology",label:"operates within"},{to:"sovereignty",label:"embodied in"},{to:"moral-urgency",label:"in tension with"}],
-        nuances:[{thinker:"Taubes",note:"Jacob Taubes reads Paul against Schmitt: where Schmitt's katechon conserves the world, Paul's messianism demands its transformation."}],
-        x:310,y:160,color:"#818cf8",status:"consolidated",source:"manual" },
-      { id:"moral-urgency", term:"Moral Urgency",
-        definition:"The ethical condition in which the weight of impending catastrophe restructures the relationship between knowledge, deliberation, and action. Moral urgency compresses time: it makes acting now feel more important than thinking further.",
-        thinkers:["Jonas","Levinas","Camus","Jaspers"], tags:["ethics","action","time","crisis"],
-        connections:[{to:"apocalypse",label:"produced by"},{to:"responsibility",label:"intensifies"},{to:"katechon",label:"frustrated by"},{to:"witness",label:"expressed through"}],
-        nuances:[{thinker:"Jonas",note:"Hans Jonas's imperative of responsibility — act so that the effects of your action are compatible with the permanence of genuine human life."}],
-        x:680,y:390,color:"#4ade80",status:"consolidated",source:"manual" },
-      { id:"responsibility", term:"Responsibility",
-        definition:"In apocalyptic ethics, responsibility takes on an expanded temporal and spatial scope — extending to future generations, non-human life, and planetary systems that cannot speak for themselves.",
-        thinkers:["Jonas","Arendt","Derrida","Young"], tags:["ethics","agency","future","accountability"],
-        connections:[{to:"moral-urgency",label:"demanded by"},{to:"witness",label:"enacted through"},{to:"apocalypse",label:"structured by"},{to:"testimony",label:"requires"}],
-        nuances:[{thinker:"Arendt",note:"Arendt's distinction between responsibility and guilt: collective responsibility cannot be reduced to individual guilt, yet it implies real political obligations."}],
-        x:840,y:300,color:"#34d399",status:"consolidated",source:"manual" },
-      { id:"witness", term:"Witness",
-        definition:"The practice and ethical obligation of bearing witness — recording, transmitting, and insisting on the reality of catastrophe for those who were not present or who wish not to know.",
-        thinkers:["Levi","Agamben","Derrida","Wiesel"], tags:["memory","language","ethics","trauma"],
-        connections:[{to:"responsibility",label:"enacts"},{to:"moral-urgency",label:"responds to"},{to:"testimony",label:"produces"},{to:"apocalypse",label:"responds to"}],
-        nuances:[{thinker:"Agamben",note:"In Remnants of Auschwitz, Agamben argues that the true witness — the one who reached the bottom — could not speak."}],
-        x:500,y:470,color:"#f472b6",status:"consolidated",source:"manual" },
-      { id:"messianism", term:"Messianism",
-        definition:"The structure of expectation organised around a coming redemption. In philosophical usage, messianism is distinguished from any specific Messiah: it names the formal structure of an unconditional promise, a justice-to-come never reducible to existing institutions.",
-        thinkers:["Benjamin","Derrida","Levinas","Bloch"], tags:["theology","hope","justice","futurity"],
-        connections:[{to:"eschatology",label:"animates"},{to:"apocalypse",label:"responds to"},{to:"katechon",label:"opposed by"},{to:"moral-urgency",label:"transforms into"}],
-        nuances:[{thinker:"Derrida",note:"Derrida's messianism without messianism: a structural openness to the other and to the future that does not fill in what arrives."}],
-        x:280,y:390,color:"#facc15",status:"consolidated",source:"manual" },
-      { id:"sovereignty", term:"Sovereignty & Exception",
-        definition:"Carl Schmitt's definition — sovereign is he who decides on the exception — links sovereignty directly to apocalyptic logic: the state of exception is the political analogue of the end of normal time.",
-        thinkers:["Schmitt","Agamben","Benjamin","Foucault"], tags:["politics","power","law","exception"],
-        connections:[{to:"katechon",label:"embodied in"},{to:"eschatology",label:"operates within"},{to:"moral-urgency",label:"claims to justify"},{to:"responsibility",label:"evades through exception"}],
-        nuances:[{thinker:"Agamben",note:"The state of exception has become the rule. Bare life — stripped of political form — is the hidden foundation of sovereign power."}],
-        x:160,y:300,color:"#38bdf8",status:"consolidated",source:"manual" },
-      { id:"testimony", term:"Testimony & Archive",
-        definition:"The material and institutional practices through which the memory of catastrophe is preserved, transmitted, and made available to future judgment. Archives are never neutral — they are sites of power, selection, and exclusion.",
-        thinkers:["Derrida","Foucault","Mbembe","Ricoeur"], tags:["memory","institution","power","language"],
-        connections:[{to:"witness",label:"materialises"},{to:"responsibility",label:"enables"},{to:"apocalypse",label:"resists erasure by"}],
-        nuances:[{thinker:"Derrida",note:"Archive Fever: the archive is haunted by the death drive — the desire to preserve is inseparable from the desire to destroy."}],
-        x:700,y:490,color:"#c084fc",status:"consolidated",source:"manual" },
-    ],
-  },
-  livelihoods: {
-    id: "livelihoods", label: "Livelihoods & Re-Rooting",
-    subtitle: "Weil, Deleuze, Berry — Place, Practice & New Ways of Living",
-    accent: "#34d399", storageKey: "semantic-network-livelihoods",
-    initialNodes: [
-      {
-        id: "livelihoods", term: "Livelihoods",
-        definition: "Not jobs or careers but the full constellation of practices, relationships, skills, and settings through which a person sustains a meaningful life. The deliberate choice of this word over 'work' or 'employment' is itself a theoretical move — it insists that sustaining life is more than economic participation. A livelihood is performed, embedded in place and community, and always more than what an economy can measure or reward.",
-        thinkers: ["Berry","Weil","Arendt","Schumacher"],
-        tags: ["livelihoods","practice","place","community","ethics"],
-        connections: [
-          {to:"re-rooting",label:"theory of change"},
-          {to:"uprootedness",label:"response to"},
-          {to:"performative-livelihood",label:"understood through"},
-          {to:"commoning",label:"sustained through"},
-          {to:"arendt-triad",label:"distinguished within"},
-          {to:"membership",label:"requires"},
-          {to:"milieu",label:"enabled by"},
-        ],
-        nuances: [
-          {thinker:"Berry",note:"For Wendell Berry, a livelihood is inseparable from membership in a place — it involves knowing the land's history, sharing its obligations, and participating in its ongoing life. The destruction of rooted livelihoods is one of the deepest wounds of industrial modernity."},
-          {thinker:"Weil",note:"Weil's analysis of affliction — the condition of those whose livelihoods have been stripped of meaning and dignity — is the negative image of what a livelihood should be: work that connects a person to community, to matter, and to something larger than themselves."},
-          {thinker:"Schumacher",note:"In Small is Beautiful, Schumacher argues that 'Buddhist economics' measures the wellbeing produced per unit of resource consumed — a livelihood is good when it develops human capacities, sustains community, and works with rather than against natural limits."},
-        ],
-        x:500,y:300,color:"#34d399",status:"consolidated",source:"manual",
-      },
-      {
-        id: "re-rooting", term: "Re-Rooting",
-        definition: "The intentional, embodied process by which people who have been structurally displaced from place-based community life — by mobility, precarity, or cultural atomisation — seek to establish durable, generative relationships with specific land and community. Re-rooting is distinguished from nostalgia by its forward orientation: it is not a return to a lost past but the making of something genuinely new from recovered practices and rediscovered needs. It is the theory of change animating this research.",
-        thinkers: ["Berry","Snyder","Weil","Berg"],
-        tags: ["livelihoods","place","community","practice","belonging"],
-        connections: [
-          {to:"livelihoods",label:"animates"},
-          {to:"uprootedness",label:"responds to"},
-          {to:"reterritorialization",label:"is a form of"},
-          {to:"re-inhabitation",label:"ecological dimension of"},
-          {to:"prefigurative-practice",label:"enacted through"},
-          {to:"membership",label:"produces over time"},
-        ],
-        nuances: [
-          {thinker:"Snyder",note:"Gary Snyder's concept of re-inhabitation — learning to live in deep relationship with a specific place — is the ecological dimension of re-rooting. His essays in The Practice of the Wild articulate what it means to inhabit rather than merely occupy a place."},
-          {thinker:"Document",note:"Re-rooting is the proposed name for the broader movement this research tracks — people leaving cities for land, intentional communities, ecovillages, and regenerative farms, not as retreat but as wager on a different way of inhabiting the world."},
-        ],
-        x:500,y:150,color:"#4ade80",status:"consolidated",source:"manual",
-      },
-      {
-        id: "uprootedness", term: "Uprootedness",
-        definition: "For Simone Weil, uprootedness is the most dangerous affliction of modernity — more fundamental than poverty or injustice because it destroys the very conditions under which a person can think, feel, and act with integrity. Uprootedness is not merely geographical displacement but the loss of living connection to tradition, community, and place. A person can be uprooted while remaining geographically stationary if the community around them has disintegrated or the traditions sustaining them have been severed.",
-        thinkers: ["Weil"],
-        tags: ["livelihoods","place","belonging","modernity","critique"],
-        connections: [
-          {to:"livelihoods",label:"what livelihoods heal"},
-          {to:"re-rooting",label:"what re-rooting responds to"},
-          {to:"need-for-roots",label:"opposite of"},
-          {to:"deterritorialization",label:"Deleuzian parallel to"},
-          {to:"membership",label:"absence of"},
-        ],
-        nuances: [
-          {thinker:"Weil",note:"In The Need for Roots (1943), Weil argues that uprootedness is self-propagating: the uprooted person tends to uproot others, either by imposing their own condition or by seeking the violent conquest of new territories. Colonialism is for Weil the most virulent form of uprootedness exported onto others."},
-          {thinker:"Contemporary resonance",note:"Weil's diagnosis anticipates the sociological literature on social atomisation, loneliness epidemics, and the collapse of civic life — uprootedness names the phenomenological dimension of what social science measures as declining social capital."},
-        ],
-        x:280,y:160,color:"#f87171",status:"consolidated",source:"manual",
-      },
-      {
-        id: "need-for-roots", term: "The Need for Roots",
-        definition: "Simone Weil's positive counterpart to uprootedness: rootedness in community, tradition, and place as a fundamental human need, as basic as food. Crucially for Weil, roots must be living — a person needs to participate actively in a community that carries a living past into a real future. Roots that are merely inherited without active participation wither; roots require ongoing practice, obligation, and attention to remain nourishing.",
-        thinkers: ["Weil"],
-        tags: ["livelihoods","belonging","community","place","ethics"],
-        connections: [
-          {to:"uprootedness",label:"opposite of"},
-          {to:"attention",label:"requires"},
-          {to:"membership",label:"realised through"},
-          {to:"re-rooting",label:"philosophical foundation of"},
-          {to:"milieu",label:"grown in"},
-        ],
-        nuances: [
-          {thinker:"Weil",note:"The Need for Roots was Weil's final major work, written for the Free French government in exile in 1943 as a plan for the spiritual renewal of France after liberation. She died before it was published. Its scope is extraordinary — moving from individual need to civilisational diagnosis."},
-          {thinker:"Obligation",note:"For Weil, rootedness comes with obligations that go in both directions: the community owes the individual the conditions for spiritual growth; the individual owes the community active participation and care. Rights without obligations produce the illusion of roots without their substance."},
-        ],
-        x:160,y:260,color:"#fb923c",status:"consolidated",source:"manual",
-      },
-      {
-        id: "attention", term: "Attention",
-        definition: "Simone Weil's central ethical and epistemological concept: the capacity to be fully present to what is actually there — a person, a plant, a place, a task — without projecting onto it or forcing it into pre-existing categories. For Weil, attention is both the highest form of love and the precondition for genuine knowledge. It is not effort but a kind of waiting — an emptying of the self so that what is real can be received. Attention connects directly to the kind of slow, embodied knowing that ecovillage and permaculture practice cultivates.",
-        thinkers: ["Weil"],
-        tags: ["livelihoods","ethics","epistemology","embodiment","practice"],
-        connections: [
-          {to:"need-for-roots",label:"required by"},
-          {to:"slow-knowledge",label:"produces"},
-          {to:"re-inhabitation",label:"cultivated through"},
-          {to:"permaculture",label:"epistemological basis of"},
-        ],
-        nuances: [
-          {thinker:"Weil",note:"In Waiting for God and her notebooks, Weil distinguishes attention from will and effort: genuine attention cannot be forced. It is the orientation of the whole self toward something outside the self, without agenda. This is why she connects it to prayer — and why it is the opposite of the grasping, extractive relation to nature and persons that modernity cultivates."},
-          {thinker:"Cross-network",note:"Weil's attention resonates with Formgefühl in the Vienna network — both name a cultivated, embodied capacity for presence that exceeds rational instruction — and with Pickering's performative idiom, where genuine engagement with the world requires receptivity to its resistances and surprises."},
-        ],
-        x:160,y:400,color:"#c084fc",status:"consolidated",source:"manual",
-      },
-      {
-        id: "territory", term: "Territory",
-        definition: "From Deleuze and Guattari: not merely land but any stable configuration of practices, relationships, expressions, and affects that gives a way of life its consistency and coherence. Territory is always simultaneously geographical and existential — a home, a rhythm, a set of habits and relationships that make a world liveable and recognisable. Territory is not given but made, and it is always potentially undone.",
-        thinkers: ["Deleuze","Guattari"],
-        tags: ["livelihoods","place","Deleuze","process","belonging"],
-        connections: [
-          {to:"deterritorialization",label:"undone by"},
-          {to:"reterritorialization",label:"remade through"},
-          {to:"geophilosophy",label:"ground of"},
-          {to:"milieu",label:"related to"},
-          {to:"re-rooting",label:"what re-rooting makes"},
-        ],
-        nuances: [
-          {thinker:"Deleuze & Guattari",note:"In A Thousand Plateaus, territory emerges when expressive qualities — birdsong, colour, posture, rhythm — are used to mark and claim a domain. Territory is thus fundamentally performative: it is constituted through repeated expression, not prior possession. This makes it fragile and dynamic rather than fixed."},
-        ],
-        x:720,y:160,color:"#38bdf8",status:"consolidated",source:"manual",
-      },
-      {
-        id: "deterritorialization", term: "Deterritorialization",
-        definition: "The process by which territories come undone — when the forces of capital, mobility, crisis, or conquest dissolve the configurations of practice, relationship, and meaning that made a livelihood possible. Modernity is in large part a massive, ongoing deterritorialization: of peasant communities, craft traditions, local economies, indigenous knowledge systems, and place-based cultures. Deterritorialization is not always catastrophic — it can be creative — but when imposed from outside and without replacement, it produces uprootedness.",
-        thinkers: ["Deleuze","Guattari"],
-        tags: ["livelihoods","Deleuze","modernity","critique","process"],
-        connections: [
-          {to:"territory",label:"undoes"},
-          {to:"reterritorialization",label:"always accompanied by"},
-          {to:"uprootedness",label:"Weil's parallel concept"},
-          {to:"re-rooting",label:"what re-rooting responds to"},
-          {to:"institutional-logics",label:"driven by"},
-        ],
-        nuances: [
-          {thinker:"Deleuze & Guattari",note:"For Deleuze and Guattari, deterritorialization and reterritorialization always occur together — there is no pure flight without a new landing. Capital deterritorialises labour from land and community and reterritorialises it onto the wage relation and the market. The question is always: what kind of reterritorialization follows?"},
-          {thinker:"Colonial dimension",note:"Colonialism is deterritorialization at its most violent — the forced dissolution of existing territories and their replacement with extractive configurations. Weil makes a parallel argument about uprootedness: the coloniser, already uprooted, exports uprootedness as a condition of domination."},
-        ],
-        x:840,y:260,color:"#f472b6",status:"consolidated",source:"manual",
-      },
-      {
-        id: "reterritorialization", term: "Reterritorialization",
-        definition: "The making of new territories on the far side of deterritorialization — the reassembly of practices, relationships, expressions, and meanings into configurations that can hold and sustain life. Re-rooting communities are engaged in reterritorialization: creating new configurations of land, practice, relationship, and meaning. Crucially for Deleuze and Guattari, reterritorialization never simply restores what was lost — it always produces something new, even when it draws on inherited forms.",
-        thinkers: ["Deleuze","Guattari"],
-        tags: ["livelihoods","Deleuze","place","process","community"],
-        connections: [
-          {to:"territory",label:"produces new"},
-          {to:"deterritorialization",label:"follows from"},
-          {to:"re-rooting",label:"philosophical frame for"},
-          {to:"prefigurative-practice",label:"enacted through"},
-          {to:"islands-of-stability",label:"parallel concept in Pickering"},
-        ],
-        nuances: [
-          {thinker:"Deleuze & Guattari",note:"Reterritorialization is not conservative restoration but creative reassembly. An ecovillage is a reterritorialization: it draws on traditional practices of communal land management, craft, and mutual aid, but assembles them in a new configuration adequate to contemporary conditions."},
-        ],
-        x:840,y:400,color:"#34d399",status:"consolidated",source:"manual",
-      },
-      {
-        id: "geophilosophy", term: "Geophilosophy",
-        definition: "Deleuze and Guattari's argument, developed in What is Philosophy?, that thinking is always of a territory — that philosophy, like agriculture, requires soil. Ideas do not float free of place; they emerge from specific geographic, climatic, social, and cultural conditions. Greek philosophy emerged from the specific deterritorialization of the Aegean city-state; European philosophy from specific configurations of land, church, and state. This gives philosophical weight to the ecovillage intuition that where and how you live shapes what you can think.",
-        thinkers: ["Deleuze","Guattari"],
-        tags: ["livelihoods","Deleuze","epistemology","place","philosophy"],
-        connections: [
-          {to:"territory",label:"philosophy rooted in"},
-          {to:"re-inhabitation",label:"grounds"},
-          {to:"slow-knowledge",label:"what geophilosophy produces"},
-          {to:"milieu",label:"the soil of thought"},
-        ],
-        nuances: [
-          {thinker:"Deleuze & Guattari",note:"In What is Philosophy?, Deleuze and Guattari argue that the Greeks invented philosophy not because they were uniquely rational but because the deterritorialized space of the Aegean archipelago — trading cities without strong centralised authority — created the conditions for immanent rather than transcendent thinking. Geography is constitutive of thought, not its backdrop."},
-          {thinker:"Cross-network",note:"Geophilosophy connects to the Ontological Turn in the TD/Rupture network: both argue that different configurations of practice and place produce genuinely different worlds of knowledge, not merely different perspectives on one world."},
-        ],
-        x:720,y:400,color:"#facc15",status:"consolidated",source:"manual",
-      },
-      {
-        id: "performative-livelihood", term: "Performative Livelihood",
-        definition: "A livelihood understood through Pickering's performative idiom — not a position you occupy or a role you represent, but a set of practices you enact. What you do constitutes what you are, rather than the reverse. A performative livelihood is always in process, always shaped by the resistances and affordances of its material and social environment, and always open to transformation through the ongoing dance of agency between the person and their world.",
-        thinkers: ["Pickering","Weil","Berry"],
-        tags: ["livelihoods","practice","epistemology","STS","becoming"],
-        connections: [
-          {to:"livelihoods",label:"reframes"},
-          {to:"attention",label:"requires Weil's"},
-          {to:"slow-knowledge",label:"produces"},
-          {to:"permaculture",label:"exemplified in"},
-        ],
-        nuances: [
-          {thinker:"Cross-network link",note:"This node is an explicit bridge to the TD/Rupture network's Performative Idiom node. The insight is that what Pickering develops as an epistemological method — attending to what practices do rather than what they represent — applies equally to how we understand livelihoods: not as positions in a social structure but as ongoing enactments."},
-        ],
-        x:340,y:430,color:"#818cf8",status:"consolidated",source:"manual",
-      },
-      {
-        id: "slow-knowledge", term: "Slow Knowledge",
-        definition: "The kind of knowing that accumulates through sustained attention to a particular place, practice, or community over time — knowing when the first frost comes, which plants grow well together, how the soil changes across a field, how the community handles conflict. Slow knowledge is irreducibly local and cannot be fully transferred through texts or courses; it requires presence, repetition, and relationship. It is opposed to the extractive, generalizable, transferable knowledge that universities and markets value and reward.",
-        thinkers: ["Orr","Snyder","Berry","Weil"],
-        tags: ["livelihoods","epistemology","place","practice","embodiment"],
-        connections: [
-          {to:"attention",label:"produced by"},
-          {to:"permaculture",label:"cultivated in"},
-          {to:"re-inhabitation",label:"accumulated through"},
-          {to:"performative-livelihood",label:"grounds"},
-          {to:"membership",label:"deepens with"},
-        ],
-        nuances: [
-          {thinker:"David Orr",note:"David Orr coined the term in Ecological Literacy — contrasting slow knowledge, which is place-based, embodied, and intergenerational, with the fast knowledge of information economies, which is decontextualised, transferable, and quickly obsolescent."},
-          {thinker:"Berry",note:"Berry's concept of 'the way of ignorance' is related: genuine knowledge of a place requires first acknowledging how much you do not and cannot know from the outside. Slow knowledge begins with epistemic humility about the limits of general principles."},
-        ],
-        x:340,y:560,color:"#fb923c",status:"consolidated",source:"manual",
-      },
-      {
-        id: "permaculture", term: "Permaculture",
-        definition: "Not merely a gardening or farming system but an epistemology and design philosophy: a way of observing, designing, and inhabiting that takes ecological relationships as its primary model. The three ethics — earth care, people care, fair share — constitute a practical ethics of livelihood. Permaculture design begins with observation rather than intervention: years of watching how water moves, where frost settles, which species associate naturally, before any design is imposed. In this sense it is a discipline of attention.",
-        thinkers: ["Mollison","Holmgren","Massy"],
-        tags: ["livelihoods","ecology","practice","design","ethics"],
-        connections: [
-          {to:"slow-knowledge",label:"cultivates"},
-          {to:"attention",label:"epistemological basis"},
-          {to:"re-inhabitation",label:"method of"},
-          {to:"commoning",label:"social dimension of"},
-          {to:"prefigurative-practice",label:"embodies"},
-        ],
-        nuances: [
-          {thinker:"Holmgren",note:"David Holmgren's later work frames permaculture as a response to energy descent — the coming reduction in available energy — rather than merely a set of gardening techniques. It is a design system for building resilient livelihoods on a contracting resource base."},
-          {thinker:"Observation principle",note:"The foundational permaculture principle — observe and interact before designing — is philosophically radical: it insists that the place knows things the designer does not, and that design must emerge from sustained listening rather than imposed template."},
-        ],
-        x:500,y:500,color:"#4ade80",status:"consolidated",source:"manual",
-      },
-      {
-        id: "commoning", term: "Commoning",
-        definition: "The practice of governing shared resources collectively, outside both market and state logic. From Bollier and Helfrich: commons are not things but social processes — ongoing practices of negotiation, care, and collective stewardship. An ecovillage is in large part an experiment in commoning land, infrastructure, knowledge, time, and skills. Commoning requires the ongoing production of shared norms, roles, and relationships — it is never finished but always in process.",
-        thinkers: ["Bollier","Helfrich","Ostrom","Federici"],
-        tags: ["livelihoods","community","commons","governance","practice"],
-        connections: [
-          {to:"livelihoods",label:"sustained through"},
-          {to:"permaculture",label:"social dimension of"},
-          {to:"prefigurative-practice",label:"instantiates"},
-          {to:"membership",label:"deepens"},
-          {to:"ecovillage",label:"practised in"},
-        ],
-        nuances: [
-          {thinker:"Ostrom",note:"Elinor Ostrom's empirical work demolished the 'tragedy of the commons' myth: communities do successfully manage shared resources without privatisation or state control, through locally evolved rules, graduated sanctions, and collective monitoring. Her eight design principles for sustainable commons governance are widely applied in ecovillage contexts."},
-          {thinker:"Federici",note:"Silvia Federici's work on commoning emphasises its feminist dimension: commons historically depended on women's reproductive labour, and their enclosure dispossessed women first. A genuine politics of commoning must address who bears the cost of care."},
-        ],
-        x:660,y:500,color:"#38bdf8",status:"consolidated",source:"manual",
-      },
-      {
-        id: "prefigurative-practice", term: "Prefigurative Practice",
-        definition: "The idea that the means must embody the ends — that you build the new world in the shell of the old by living differently now, rather than waiting for structural change first. Ecovillages are explicitly prefigurative: they are not waiting for a better society to be legislated into existence; they are attempting to instantiate one in the present, as a demonstration, a refuge, and a seed. Prefigurative practice is vulnerable to the critique of privilege — who can afford to live differently? — but its defenders argue that without living experiments, alternative futures remain merely theoretical.",
-        thinkers: ["Boggs","Yates","Graeber"],
-        tags: ["livelihoods","community","practice","politics","ethics"],
-        connections: [
-          {to:"re-rooting",label:"enacted through"},
-          {to:"commoning",label:"instantiates"},
-          {to:"ecovillage",label:"primary site of"},
-          {to:"reterritorialization",label:"produces new"},
-          {to:"permaculture",label:"embodies"},
-        ],
-        nuances: [
-          {thinker:"Graeber",note:"David Graeber argued that prefigurative politics is not utopian naivety but the only coherent form of radical practice: if you cannot demonstrate the possibility of different social relations in the present, you have no grounds to claim they are possible in the future."},
-          {thinker:"Tension",note:"The tension within prefigurative practice is between depth and scale: communities that go deepest into alternative ways of living often become most insular and least connected to broader social change. The research question is whether this tension can be held productively."},
-        ],
-        x:660,y:360,color:"#f59e0b",status:"consolidated",source:"manual",
-      },
-      {
-        id: "ecovillage", term: "Ecovillage",
-        definition: "Intentional communities that combine ecological design, alternative economics, and social experimentation in pursuit of sustainable and meaningful ways of living. Ecovillages are simultaneously practical experiments — in food production, energy systems, governance, and community relations — and cultural proposals: ways of demonstrating that different livelihoods are possible. The Global Ecovillage Network connects hundreds of such communities across every continent, each with its own configuration of priorities and practices.",
-        thinkers: ["GEN","Gilman","Bang"],
-        tags: ["livelihoods","community","ecology","practice","place"],
-        connections: [
-          {to:"prefigurative-practice",label:"primary site of"},
-          {to:"commoning",label:"practises"},
-          {to:"re-inhabitation",label:"method of"},
-          {to:"permaculture",label:"often organised around"},
-          {to:"slow-knowledge",label:"accumulates"},
-          {to:"reterritorialization",label:"enacts"},
-        ],
-        nuances: [
-          {thinker:"Diversity",note:"Ecovillages range enormously — from spiritually oriented communities like Findhorn (Scotland) and Auroville (India), to politically explicit projects like Christiania (Copenhagen), to more agrarian experiments like those documented by the Dark Mountain Project. What unites them is the attempt to design livelihoods rather than merely inhabit existing ones."},
-          {thinker:"Research gap",note:"Most academic literature either treats ecovillages from outside (sociological ethnography, sustainability science) or is produced by practitioners from within. Sustained qualitative research that takes seriously both the intellectual stakes and the embodied reality — including failures and contradictions — is the gap this project addresses."},
-        ],
-        x:820,y:500,color:"#34d399",status:"consolidated",source:"manual",
-      },
-      {
-        id: "re-inhabitation", term: "Re-Inhabitation",
-        definition: "From bioregionalists Peter Berg and Gary Snyder: the deliberate practice of learning to live in deep relationship with a specific place — its watershed, ecology, seasonal rhythms, indigenous history, and non-human communities. Where re-rooting names the broader social process of return to place-based life, re-inhabitation names its ecological and perceptual dimension: learning the land as a living partner rather than a resource or backdrop. Re-inhabitation takes years and cannot be rushed.",
-        thinkers: ["Berg","Snyder","Kimmerer"],
-        tags: ["livelihoods","place","ecology","practice","belonging"],
-        connections: [
-          {to:"re-rooting",label:"ecological dimension of"},
-          {to:"slow-knowledge",label:"accumulated through"},
-          {to:"attention",label:"requires"},
-          {to:"permaculture",label:"method of"},
-          {to:"geophilosophy",label:"grounded by"},
-        ],
-        nuances: [
-          {thinker:"Kimmerer",note:"Robin Wall Kimmerer's Braiding Sweetgrass extends re-inhabitation to include indigenous epistemologies: learning a place means learning its names in its own language, and learning the protocols of reciprocity that make sustained relationship possible. Re-inhabitation without this dimension risks reproducing settler relationships to land under a greener name."},
-          {thinker:"Snyder",note:"Snyder's bioregionalism insists on the watershed as the primary unit of belonging: you know where you are when you know where your water comes from and where it goes. This is both geographical fact and ethical orientation."},
-        ],
-        x:340,y:160,color:"#4ade80",status:"consolidated",source:"manual",
-      },
-      {
-        id: "membership", term: "Membership",
-        definition: "Wendell Berry's term for belonging to a place and community in the full sense: knowing its history, sharing its obligations, participating in its ongoing life across time. Membership is what you accumulate by staying — it is the opposite of mobility, of treating place as interchangeable backdrop to a portable life. Berry argues that the destruction of membership is one of the deepest wounds of industrial modernity: when people no longer belong anywhere in this full sense, communities lose their capacity for self-governance and self-repair.",
-        thinkers: ["Berry"],
-        tags: ["livelihoods","belonging","community","place","ethics"],
-        connections: [
-          {to:"livelihoods",label:"required by"},
-          {to:"re-rooting",label:"produced through"},
-          {to:"need-for-roots",label:"Weil's parallel concept"},
-          {to:"slow-knowledge",label:"deepens with"},
-          {to:"commoning",label:"deepened by"},
-          {to:"uprootedness",label:"absence of"},
-        ],
-        nuances: [
-          {thinker:"Berry",note:"In essays collected in What Are People For? and The Way of Ignorance, Berry argues that membership requires reciprocity across time: you inherit obligations from those who came before and pass them to those who come after. A community without this temporal depth is not a community but an aggregate of individuals."},
-        ],
-        x:180,y:480,color:"#fb923c",status:"consolidated",source:"manual",
-      },
-      {
-        id: "milieu", term: "Milieu",
-        definition: "The surrounding environment — social, spatial, cultural, ecological — that makes certain livelihoods, thoughts, and ways of being possible and others unthinkable. A milieu is not merely a context or backdrop but an active shaping force: it summons certain capacities and suppresses others, makes certain futures imaginable and others invisible. The concept sits at the intersection of Deleuze's territory and Weil's need for roots — it is the medium in which a person either flourishes or withers.",
-        thinkers: ["Canguilhem","Deleuze","Simondon"],
-        tags: ["livelihoods","place","community","ecology","conditions"],
-        connections: [
-          {to:"livelihoods",label:"enables or constrains"},
-          {to:"territory",label:"related to"},
-          {to:"need-for-roots",label:"what roots grow in"},
-          {to:"geophilosophy",label:"the soil of thought"},
-          {to:"slow-knowledge",label:"source of"},
-        ],
-        nuances: [
-          {thinker:"Canguilhem",note:"Georges Canguilhem's concept of milieu — developed in The Normal and the Pathological — treats organism and environment as constitutively related: what counts as normal or pathological depends on the milieu in which life unfolds. A livelihood is healthy or afflicted relative to its milieu, not in the abstract."},
-          {thinker:"Document",note:"Listed in the Black Swanning semantic network document without elaboration — its position between institutional logics and geophilosophy suggests it is meant to name the intermediate scale between the individual and the system."},
-        ],
-        x:180,y:350,color:"#818cf8",status:"provisional",source:"paper",
-      },
-      {
-        id: "arendt-triad", term: "Labour, Work & Action",
-        definition: "Hannah Arendt's tripartite distinction in The Human Condition: Labour is the biological process of sustaining life — cyclical, endless, leaving no permanent trace. Work is the fabrication of a durable human world — objects, institutions, stories that outlast individual lives. Action is the capacity to begin something genuinely new in the public realm — to initiate, to appear, to be seen. A livelihood might involve all three in different proportions, but modern economies tend to reduce everything to labour — endless, meaningless process — while suppressing the dimensions of work and action that give life dignity and meaning.",
-        thinkers: ["Arendt"],
-        tags: ["livelihoods","ethics","politics","practice","philosophy"],
-        connections: [
-          {to:"livelihoods",label:"distinguished within"},
-          {to:"prefigurative-practice",label:"action dimension of"},
-          {to:"commoning",label:"work and action dimension of"},
-          {to:"uprootedness",label:"reduction to labour as"},
-        ],
-        nuances: [
-          {thinker:"Arendt",note:"For Arendt, the danger of modernity is that the animal laborans — the labouring animal, concerned only with biological survival and consumption — has triumphed over the homo faber (the maker of durable things) and the citizen (the actor in public life). A meaningful livelihood must include work and action, not only labour."},
-          {thinker:"Document",note:"Listed explicitly in the Black Swanning document under vocabulary still requiring elaboration — its position alongside milieu and institutional logics suggests it is meant to provide a philosophical grammar for distinguishing different modes of sustaining life."},
-        ],
-        x:660,y:160,color:"#f472b6",status:"consolidated",source:"paper",
-      },
-      {
-        id: "institutional-logics", term: "Institutional Logics",
-        definition: "The rules, norms, and taken-for-granted assumptions that govern how institutions operate and what kinds of livelihoods, knowledge, and ways of life they can recognise, support, or suppress. Institutional logics are not merely bureaucratic rules but deep cultural frames that shape what appears rational, legitimate, and possible within a given field. The logic of the market, the university, the state, and the hospital each produce different subjects, different forms of value, and different exclusions.",
-        thinkers: ["Friedland","Alford","Thornton"],
-        tags: ["livelihoods","institution","power","community","critique"],
-        connections: [
-          {to:"livelihoods",label:"govern what counts as"},
-          {to:"deterritorialization",label:"driver of"},
-          {to:"prefigurative-practice",label:"what prefiguration resists"},
-          {to:"milieu",label:"shapes"},
-          {to:"open-ended-learning",label:"what open learning resists"},
-        ],
-        nuances: [
-          {thinker:"Document",note:"Listed in the Black Swanning document as a node requiring elaboration, alongside milieu and Arendt's triad. Its force is in naming why alternative livelihoods face structural resistance: they violate the taken-for-granted assumptions about what counts as productive, valuable, or rational that institutions reproduce automatically."},
-        ],
-        x:500,y:430,color:"#facc15",status:"provisional",source:"paper",
-      },
-    ],
-  },
+  meta: metaNetwork,
+  methods: methodsNetwork,
+  vienna: viennaNetwork,
+  livelihoods: livelihoodsNetwork,
+  simulation: simulationNetwork,
+  worlding: worldingNetwork,
+  movement: movementNetwork,
+  creativity: creativityNetwork,
+  dsa: dsaNetwork,
 };
+
+// ---VOCABULARY GROUPS (for landing page organisation) ---
+const GROUPS = [
+  {
+    id: "foundation",
+    label: "Foundation",
+    description: "The meta-vocabularies that frame and introduce all the others",
+    networkIds: ["meta","methods","creativity"],
+  },
+  {
+    id: "ontological",
+    label: "Ontological",
+    description: "Vocabularies concerned with worlds, movement, and the nature of being",
+    networkIds: ["worlding","livelihoods","movement"],
+  },
+  {
+    id: "cultural",
+    label: "Cultural & Critical",
+    description: "Vocabularies grounded in specific cultural and critical traditions",
+    networkIds: ["vienna","simulation"],
+  },
+  {
+    id: "applied",
+    label: "Applied",
+    description: "Vocabularies developed in and for specific research and community contexts",
+    networkIds: ["dsa"],
+  },
+];
 
 // ---CONSTANTS ---
 
@@ -896,6 +87,28 @@ const TAG_COLORS = {
   livelihoods:"#34d399",belonging:"#fb923c",ecology:"#4ade80",
   Deleuze:"#38bdf8",commons:"#34d399",governance:"#facc15",
   philosophy:"#818cf8",politics:"#f472b6",
+  simulation:"#f87171",Baudrillard:"#f87171",transit:"#38bdf8",
+  homogeneity:"#facc15",consumption:"#fb923c",communication:"#34d399",
+  sensation:"#c084fc",image:"#f472b6",architecture:"#38bdf8",
+  economics:"#facc25",
+  worlding:"#a78bfa",cosmology:"#c084fc",creativity:"#4ade80",
+  existence:"#818cf8",enactivism:"#38bdf8",biology:"#34d399",
+  desire:"#f472b6",relationality:"#fb923c",feminism:"#f472b6",
+  multispecies:"#4ade80",pluriversality:"#a78bfa",
+  silence:"#818cf8",limit:"#f87171",strategy:"#38bdf8",
+  rhythm:"#4ade80",research:"#34d399",
+  freedom:"#4ade80",urban:"#38bdf8",capitalism:"#f87171",
+  transformation:"#c084fc",
+  cultivation:"#c084fc",Buddhism:"#818cf8",
+  sacred:"#f59e0b",religion:"#fb923c",mystery:"#a78bfa",
+  love:"#f472b6",aliveness:"#4ade80",
+  complexity:"#38bdf8",
+  imitation:"#c084fc",narrative:"#fb923c",
+  DSA:"#34d399",awareness:"#4ade80",systems:"#38bdf8",
+  sensemaking:"#a78bfa",anticipation:"#fb923c",
+  dialogue:"#34d399",hosting:"#b07a3a",
+  liminality:"#c084fc",seasons:"#facc15",
+  dwelling:"#8f7a4a",
   default:"#94a3b8",
 };
 const tagColor = t => TAG_COLORS[t] || TAG_COLORS.default;
@@ -1466,35 +679,153 @@ function NetworkView({ networkId, accent }) {
   );
 }
 
+
+// ---LANDING PAGE ---
+
+function LandingPage({ onSelect }) {
+  return (
+    <div style={{ minHeight:"100vh", background:"#0d0d14", color:"#e2e8f0", fontFamily:"'Crimson Pro',Georgia,serif" }}>
+      <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+
+      {/* Header */}
+      <div style={{ padding:"2.5rem 3rem 2rem", borderBottom:"1px solid rgba(255,255,255,0.07)" }}>
+        <div style={{ fontFamily:"'Space Mono',monospace", fontSize:"9px", color:"rgba(255,255,255,0.25)", letterSpacing:"0.2em", textTransform:"uppercase", marginBottom:"0.5rem" }}>
+          Re-Rooting Research
+        </div>
+        <div style={{ fontSize:"32px", fontWeight:300, color:"#f1f5f9", letterSpacing:"-0.02em", marginBottom:"0.75rem" }}>
+          Living Vocabularies
+        </div>
+        <div style={{ fontSize:"16px", fontStyle:"italic", color:"rgba(255,255,255,0.35)", fontWeight:300, maxWidth:"520px", lineHeight:1.75 }}>
+          A growing collection of semantic networks — shared languages for inquiry, practice, and world-making.
+        </div>
+      </div>
+
+      {/* Groups */}
+      <div style={{ padding:"2rem 3rem 4rem" }}>
+        {GROUPS.map(group => {
+          const nets = group.networkIds.map(id => NETWORKS[id]).filter(Boolean);
+          if (nets.length === 0) return null;
+          return (
+            <div key={group.id} style={{ marginBottom:"3rem" }}>
+              {/* Group header */}
+              <div style={{ marginBottom:"1.2rem" }}>
+                <div style={{ fontFamily:"'Space Mono',monospace", fontSize:"9px", letterSpacing:"0.16em", color:"rgba(255,255,255,0.25)", textTransform:"uppercase", marginBottom:"0.3rem" }}>
+                  {group.label}
+                </div>
+                <div style={{ fontSize:"13px", color:"rgba(255,255,255,0.2)", fontStyle:"italic" }}>
+                  {group.description}
+                </div>
+              </div>
+
+              {/* Vocabulary cards */}
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(300px, 1fr))", gap:"12px" }}>
+                {nets.map(net => (
+                  <button
+                    key={net.id}
+                    onClick={() => onSelect(net.id)}
+                    style={{
+                      textAlign:"left",
+                      background:"rgba(255,255,255,0.02)",
+                      border:`1px solid ${net.accent}33`,
+                      borderRadius:"10px",
+                      padding:"1.5rem",
+                      cursor:"pointer",
+                      transition:"all 0.2s",
+                      display:"flex",
+                      flexDirection:"column",
+                      gap:"0.5rem",
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.background = `${net.accent}0d`;
+                      e.currentTarget.style.borderColor = `${net.accent}66`;
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.background = "rgba(255,255,255,0.02)";
+                      e.currentTarget.style.borderColor = `${net.accent}33`;
+                    }}
+                  >
+                    {/* Accent dot */}
+                    <div style={{ width:8, height:8, borderRadius:"50%", background:net.accent, marginBottom:"0.25rem" }} />
+
+                    {/* Label */}
+                    <div style={{ fontSize:"18px", fontWeight:300, color:"#f1f5f9", letterSpacing:"-0.01em", lineHeight:1.2 }}>
+                      {net.label}
+                    </div>
+
+                    {/* Subtitle */}
+                    <div style={{ fontFamily:"'Space Mono',monospace", fontSize:"9px", color:"rgba(255,255,255,0.25)", letterSpacing:"0.08em", lineHeight:1.6 }}>
+                      {net.subtitle}
+                    </div>
+
+                    {/* Node count */}
+                    <div style={{ marginTop:"0.5rem", fontFamily:"'Space Mono',monospace", fontSize:"9px", color:net.accent, opacity:0.6, letterSpacing:"0.06em" }}>
+                      {net.initialNodes.length} terms
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Footer */}
+      <div style={{ padding:"1.5rem 3rem", borderTop:"1px solid rgba(255,255,255,0.05)" }}>
+        <div style={{ fontFamily:"'Space Mono',monospace", fontSize:"9px", color:"rgba(255,255,255,0.12)", letterSpacing:"0.1em" }}>
+          {Object.keys(NETWORKS).length} vocabularies · {Object.values(NETWORKS).reduce((sum, n) => sum + n.initialNodes.length, 0)} terms
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ---ROOT APP ---
 
 export default function App() {
-  const [activeNet, setActiveNet] = useState("td");
-  const net = NETWORKS[activeNet];
+  const [activeNet, setActiveNet] = useState(null);
+  const net = activeNet ? NETWORKS[activeNet] : null;
+
+  // If no network selected, show landing page
+  if (!activeNet || !net) {
+    return <LandingPage onSelect={setActiveNet} />;
+  }
+
   return (
     <div style={{ fontFamily:"'Crimson Pro',Georgia,serif", background:"#0d0d14", minHeight:"100vh", display:"flex", flexDirection:"column", color:"#e2e8f0" }}>
       <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+
+      {/* Header */}
       <div style={{ padding:"13px 24px", borderBottom:"1px solid rgba(255,255,255,0.07)", display:"flex", alignItems:"center", justifyContent:"space-between", background:"rgba(255,255,255,0.02)", flexShrink:0 }}>
-        <div>
-          <div style={{ fontFamily:"'Space Mono',monospace", fontSize:"9px", color:"rgba(255,255,255,0.25)", letterSpacing:"0.2em", textTransform:"uppercase", marginBottom:"2px" }}>Semantic Network</div>
-          <div style={{ fontSize:"18px", fontWeight:300, color:"#f1f5f9", letterSpacing:"-0.01em" }}>Living Vocabulary</div>
-        </div>
-        <div style={{ display:"flex", gap:"6px", background:"rgba(255,255,255,0.04)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:"8px", padding:"4px" }}>
-          {Object.values(NETWORKS).map(n=>(
-            <button key={n.id} onClick={()=>setActiveNet(n.id)}
-              style={{ padding:"7px 14px", borderRadius:"6px", cursor:"pointer", border:"none", background: activeNet===n.id ? `${n.accent}20` : "transparent", color: activeNet===n.id ? n.accent : "rgba(255,255,255,0.3)", fontFamily:"'Space Mono',monospace", fontSize:"10px", letterSpacing:"0.04em", boxShadow: activeNet===n.id ? `0 0 0 1px ${n.accent}44` : "none", transition:"all 0.2s" }}>
-              {n.label}
-            </button>
-          ))}
+        <div style={{ display:"flex", alignItems:"center", gap:"20px" }}>
+          {/* Home link */}
+          <button
+            onClick={() => setActiveNet(null)}
+            style={{ fontFamily:"'Space Mono',monospace", fontSize:"9px", color:"rgba(255,255,255,0.3)", letterSpacing:"0.1em", background:"none", border:"none", cursor:"pointer", padding:0, transition:"color 0.2s" }}
+            onMouseEnter={e => e.currentTarget.style.color = "rgba(255,255,255,0.7)"}
+            onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.3)"}
+          >
+            ← all vocabularies
+          </button>
+          <div style={{ width:1, height:16, background:"rgba(255,255,255,0.1)" }} />
+          <div>
+            <div style={{ fontFamily:"'Space Mono',monospace", fontSize:"9px", color:"rgba(255,255,255,0.25)", letterSpacing:"0.2em", textTransform:"uppercase", marginBottom:"2px" }}>
+              Semantic Network
+            </div>
+            <div style={{ fontSize:"18px", fontWeight:300, color:"#f1f5f9", letterSpacing:"-0.01em" }}>
+              {net.label}
+            </div>
+          </div>
         </div>
       </div>
+
       <div style={{ padding:"7px 24px", borderBottom:"1px solid rgba(255,255,255,0.05)", background:"rgba(255,255,255,0.01)", flexShrink:0 }}>
         <span style={{ fontFamily:"'Space Mono',monospace", fontSize:"9px", color:"rgba(255,255,255,0.22)", letterSpacing:"0.1em" }}>
-          {net.subtitle} · {NETWORKS[activeNet].initialNodes.length} seed terms
+          {net.subtitle} · {net.initialNodes.length} seed terms
         </span>
       </div>
+
       <div style={{ flex:1, display:"flex", overflow:"hidden" }}>
-        <NetworkView key={activeNet} networkId={activeNet} accent={net.accent}/>
+        <NetworkView key={activeNet} networkId={activeNet} accent={net.accent} networks={NETWORKS}/>
       </div>
     </div>
   );
