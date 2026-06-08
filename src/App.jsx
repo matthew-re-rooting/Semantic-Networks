@@ -782,7 +782,11 @@ function LandingPage({ onSelect }) {
 // ---ROOT APP ---
 
 export default function App() {
-  const [activeNet, setActiveNet] = useState(null);
+  const params = new URLSearchParams(window.location.search);
+const networkParam = params.get('network');
+const [activeNet, setActiveNet] = useState(
+  networkParam && NETWORKS[networkParam] ? networkParam : null
+);;
   const net = activeNet ? NETWORKS[activeNet] : null;
 
   // If no network selected, show landing page
