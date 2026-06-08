@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { metaNetwork } from "./networks/meta.js";
-import { methodsNetwork } from "./networks/methods.js";
-import { viennaNetwork } from "./networks/vienna.js";
-import { livelihoodsNetwork } from "./networks/livelihoods.js";
-import { simulationNetwork } from "./networks/simulation.js";
-import { worldingNetwork } from "./networks/worlding.js";
-import { movementNetwork } from "./networks/movement.js";
-import { creativityNetwork } from "./networks/creativity.js";
-import { dsaNetwork } from "./networks/dsa.js";
+import { metaNetwork } from "./Networks/meta.js";
+import { methodsNetwork } from "./Networks/methods.js";
+import { viennaNetwork } from "./Networks/vienna.js";
+import { livelihoodsNetwork } from "./Networks/livelihoods.js";
+import { simulationNetwork } from "./Networks/simulation.js";
+import { worldingNetwork } from "./Networks/worlding.js";
+import { movementNetwork } from "./Networks/movement.js";
+import { creativityNetwork } from "./Networks/creativity.js";
+import { dsaNetwork } from "./Networks/dsa.js";
 
 // ---NETWORK REGISTRY ---
 // To add a new vocabulary: import it above and add it to NETWORKS below.
