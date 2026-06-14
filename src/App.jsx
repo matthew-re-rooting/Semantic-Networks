@@ -86,7 +86,6 @@ const GROUPS = [
       networkIds: ["hinterlands","deluge-phenomenology","zombie-phenomenology","bardo-phenomenology"],
     },
   ];
-];
 
 // ---CONSTANTS ---
 
@@ -872,5 +871,6 @@ const [activeNet, setActiveNet] = useState(
 
 const secLabel = { fontSize:"10px", fontFamily:"'Space Mono',monospace", color:"rgba(255,255,255,0.27)", letterSpacing:"0.12em", marginBottom:"9px", marginTop:"4px" };
 const inputSt = { width:"100%", background:"rgba(255,255,255,0.05)", border:"1px solid rgba(255,255,255,0.1)", borderRadius:"7px", padding:"10px 12px", color:"#e2e8f0", fontSize:"14px", fontFamily:"'Crimson Pro',Georgia,serif", outline:"none", boxSizing:"border-box", display:"block" };
+
 
 
