@@ -8,6 +8,8 @@ import { worldingNetwork } from "./Networks/worlding.js";
 import { movementNetwork } from "./Networks/movement.js";
 import { creativityNetwork } from "./Networks/creativity.js";
 import { dsaNetwork } from "./Networks/dsa.js";
+import { musicalityNetwork } from "./Networks/musicality.js";
+import { resonanceNetwork } from "./Networks/resonance.js";
 
 // ---NETWORK REGISTRY ---
 // To add a new vocabulary: import it above and add it to NETWORKS below.
@@ -23,6 +25,8 @@ const NETWORKS = {
   movement: movementNetwork,
   creativity: creativityNetwork,
   dsa: dsaNetwork,
+  musicality: musicalityNetwork,
+  resonance: resonanceNetwork,
 };
 
 // ---VOCABULARY GROUPS (for landing page organisation) ---
@@ -31,13 +35,13 @@ const GROUPS = [
     id: "foundation",
     label: "Foundation",
     description: "The meta-vocabularies that frame and introduce all the others",
-    networkIds: ["meta","methods","creativity"],
+    networkIds: ["meta","methods","creativity","musicality"],
   },
   {
     id: "ontological",
     label: "Ontological",
     description: "Vocabularies concerned with worlds, movement, and the nature of being",
-    networkIds: ["worlding","livelihoods","movement"],
+    networkIds: ["worlding","livelihoods","movement","resonance"],
   },
   {
     id: "cultural",
