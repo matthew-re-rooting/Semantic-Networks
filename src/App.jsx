@@ -73,6 +73,19 @@ const GROUPS = [
     description: "Vocabularies developed in and for specific research and community contexts",
     networkIds: ["dsa"],
   },
+  {
+      id: "phenomenological-frameworks",
+      label: "Phenomenological Frameworks",
+      description: "Systematic philosophical architectures for understanding experience, consciousness, and being",
+      networkIds: ["goethean-phenomenology","heidegger","husserl","merleau-ponty"],
+    },
+    {
+      id: "social-phenomenologies",
+      label: "Social Phenomenologies",
+      description: "Imaginal worlds and their bodily effects — what it is like to inhabit particular conditions of existence",
+      networkIds: ["hinterlands","deluge-phenomenology","zombie-phenomenology","bardo-phenomenology"],
+    },
+  ];
 ];
 
 // ---CONSTANTS ---
