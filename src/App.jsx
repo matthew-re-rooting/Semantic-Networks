@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+﻿import { useState, useEffect, useRef, useCallback } from "react";
 import { metaNetwork } from "./Networks/meta.js";
 import { methodsNetwork } from "./Networks/methods.js";
 import { viennaNetwork } from "./Networks/vienna.js";
@@ -8,8 +8,17 @@ import { worldingNetwork } from "./Networks/worlding.js";
 import { movementNetwork } from "./Networks/movement.js";
 import { creativityNetwork } from "./Networks/creativity.js";
 import { dsaNetwork } from "./Networks/dsa.js";
+import { goetheanPhenomenologyNetwork } from "./Networks/goethean-phenomenology.js";
+import { heideggerNetwork } from "./Networks/heidegger.js";
+import { husserlNetwork } from "./Networks/husserl.js";
+import { merleauPontyNetwork } from "./Networks/merleau-ponty.js";
+import { hinterlandsNetwork } from "./Networks/hinterlands.js";
+import { delugeNetwork } from "./Networks/deluge-phenomenology.js";
+import { zombiePhenomenologyNetwork } from "./Networks/zombie-phenomenology.js";
+import { bardoPhenomenologyNetwork } from "./Networks/bardo-phenomenology.js";
 import { musicalityNetwork } from "./Networks/musicality.js";
 import { resonanceNetwork } from "./Networks/resonance.js";
+import { usefulnessNetwork } from "./Networks/usefulness.js";
 
 // ---NETWORK REGISTRY ---
 // To add a new vocabulary: import it above and add it to NETWORKS below.
@@ -27,6 +36,15 @@ const NETWORKS = {
   dsa: dsaNetwork,
   musicality: musicalityNetwork,
   resonance: resonanceNetwork,
+  "goethean-phenomenology": goetheanPhenomenologyNetwork,
+  heidegger: heideggerNetwork,
+  husserl: husserlNetwork,
+  "merleau-ponty": merleauPontyNetwork,
+  hinterlands: hinterlandsNetwork,
+  "deluge-phenomenology": delugeNetwork,
+  "zombie-phenomenology": zombiePhenomenologyNetwork,
+  "bardo-phenomenology": bardoPhenomenologyNetwork,
+  usefulness: usefulnessNetwork,
 };
 
 // ---VOCABULARY GROUPS (for landing page organisation) ---
@@ -124,13 +142,13 @@ const STATUS_STYLES = {
   proposed:     { border:"2px dashed rgba(255,255,255,0.3)", opacity:0.7 },
 };
 
-const SOURCE_ICONS = { manual:"✎", transcript:"◉", voice:"♪", paper:"▤", personal:"★" };
+const SOURCE_ICONS = { manual:"âœŽ", transcript:"â—‰", voice:"â™ª", paper:"â–¤", personal:"â˜…" };
 
 const INPUT_TYPES = [
-  { id:"transcript", label:"Transcript", icon:"◉", color:"#38bdf8", desc:"Meeting or interview transcript" },
-  { id:"voice",      label:"Voice Note", icon:"♪", color:"#4ade80", desc:"Record or describe an idea" },
-  { id:"paper",      label:"Paper / Text", icon:"▤", color:"#fb923c", desc:"Academic paper or document" },
-  { id:"personal",   label:"Personal Note", icon:"★", color:"#f472b6", desc:"Reflection, story, or imaginary" },
+  { id:"transcript", label:"Transcript", icon:"â—‰", color:"#38bdf8", desc:"Meeting or interview transcript" },
+  { id:"voice",      label:"Voice Note", icon:"â™ª", color:"#4ade80", desc:"Record or describe an idea" },
+  { id:"paper",      label:"Paper / Text", icon:"â–¤", color:"#fb923c", desc:"Academic paper or document" },
+  { id:"personal",   label:"Personal Note", icon:"â˜…", color:"#f472b6", desc:"Reflection, story, or imaginary" },
 ];
 
 // ---AI EXTRACTION ---
@@ -239,7 +257,7 @@ function NodeCircle({ node, selected, onSelect }) {
         fill="white" fontFamily="'Crimson Pro', serif"
         fontSize={selected?"12":"10"} fontWeight="600"
         style={{ userSelect:"none", pointerEvents:"none" }}>
-        {node.term.length > 13 ? node.term.slice(0,12)+"…" : node.term}
+        {node.term.length > 13 ? node.term.slice(0,12)+"â€¦" : node.term}
       </text>
       {node.status !== "consolidated" && (
         <text x={node.x} y={node.y+14} textAnchor="middle"
@@ -363,7 +381,7 @@ function InputPanel({ onPropose, networkContext, existingNodes }) {
         {error && <div style={{ fontSize:"12px", color:"#f472b6", marginTop:"8px", fontFamily:"'Space Mono',monospace" }}>{error}</div>}
         <button onClick={handleExtract} disabled={!content.trim() || loading}
           style={{ marginTop:"12px", padding:"12px", borderRadius:"8px", cursor: content.trim()&&!loading ? "pointer" : "default", background: content.trim()&&!loading ? `${it.color}20` : "rgba(255,255,255,0.03)", border: `1px solid ${content.trim()&&!loading ? it.color+"55" : "rgba(255,255,255,0.08)"}`, color: content.trim()&&!loading ? it.color : "rgba(255,255,255,0.2)", fontFamily:"'Space Mono',monospace", fontSize:"11px", letterSpacing:"0.06em", transition:"all 0.2s" }}>
-          {loading ? "EXTRACTING NODES…" : `EXTRACT FROM ${it.label.toUpperCase()}`}
+          {loading ? "EXTRACTING NODESâ€¦" : `EXTRACT FROM ${it.label.toUpperCase()}`}
         </button>
       </div>
     </div>
@@ -400,7 +418,7 @@ function ReviewPanel({ proposed, networkNote, onAccept, onReject, onAcceptAll, e
             <div style={{ marginBottom:"10px" }}>
               {node.connections.map((c,j) => {
                 const t = existingNodes.find(n=>n.id===c.to);
-                return <span key={j} style={{ display:"inline-block", fontSize:"10px", fontFamily:"'Space Mono',monospace", background:"rgba(255,255,255,0.06)", color:"rgba(255,255,255,0.4)", padding:"2px 8px", borderRadius:"4px", marginRight:"5px", marginBottom:"4px" }}>{c.label} → {t?.term || c.to}</span>;
+                return <span key={j} style={{ display:"inline-block", fontSize:"10px", fontFamily:"'Space Mono',monospace", background:"rgba(255,255,255,0.06)", color:"rgba(255,255,255,0.4)", padding:"2px 8px", borderRadius:"4px", marginRight:"5px", marginBottom:"4px" }}>{c.label} â†’ {t?.term || c.to}</span>;
               })}
             </div>
           )}
@@ -427,7 +445,7 @@ function DeleteButton({ onDelete }) {
       </div>
     );
   }
-  return <button onClick={() => setConfirming(true)} style={{ background:"transparent", border:"none", color:"rgba(255,100,100,0.25)", cursor:"pointer", fontSize:"14px", padding:"0 0 0 8px", lineHeight:1 }} title="Delete node">×</button>;
+  return <button onClick={() => setConfirming(true)} style={{ background:"transparent", border:"none", color:"rgba(255,100,100,0.25)", cursor:"pointer", fontSize:"14px", padding:"0 0 0 8px", lineHeight:1 }} title="Delete node">Ã—</button>;
 }
 
 function NodeDetail({ node, nodes, onSelectRelated, onDelete, onStatusChange }) {
@@ -443,7 +461,7 @@ function NodeDetail({ node, nodes, onSelectRelated, onDelete, onStatusChange }) 
           </div>
           <div style={{ display:"flex", gap:"6px", alignItems:"center", marginBottom:"4px" }}>
             <span style={{ fontSize:"9px", fontFamily:"'Space Mono',monospace", color:"rgba(255,255,255,0.3)" }}>{SOURCE_ICONS[node.source||"manual"]} {node.source||"manual"}</span>
-            <span style={{ fontSize:"9px", color:"rgba(255,255,255,0.15)" }}>—</span>
+            <span style={{ fontSize:"9px", color:"rgba(255,255,255,0.15)" }}>â€”</span>
             <select value={node.status||"consolidated"} onChange={e=>onStatusChange(node.id,e.target.value)}
               style={{ fontSize:"9px", fontFamily:"'Space Mono',monospace", background:"rgba(255,255,255,0.06)", border:"1px solid rgba(255,255,255,0.12)", color:"rgba(255,255,255,0.5)", borderRadius:"4px", padding:"2px 6px", cursor:"pointer" }}>
               {["consolidated","provisional","contested","proposed"].map(s=><option key={s} value={s}>{s}</option>)}
@@ -492,7 +510,7 @@ function NodeDetail({ node, nodes, onSelectRelated, onDelete, onStatusChange }) 
                   </div>
                   {conn.label && <div style={{ fontSize:"10px", fontFamily:"'Space Mono',monospace", color:"rgba(255,255,255,0.28)", marginTop:"1px" }}>{conn.label}</div>}
                 </div>
-                {target && <span style={{ color:"rgba(255,255,255,0.2)", fontSize:"14px" }}>→</span>}
+                {target && <span style={{ color:"rgba(255,255,255,0.2)", fontSize:"14px" }}>â†’</span>}
               </div>
             );
           })}
@@ -565,10 +583,10 @@ function NetworkView({ networkId, accent }) {
   }, [net.storageKey]);
 
   const save = useCallback(async (newNodes) => {
-    setSaveStatus("saving…");
+    setSaveStatus("savingâ€¦");
     try {
       await window.storage.set(net.storageKey, JSON.stringify(newNodes), false);
-      setSaveStatus("saved ✓");
+      setSaveStatus("saved âœ“");
       setTimeout(()=>setSaveStatus(""),2000);
     } catch { setSaveStatus("error"); }
   }, [net.storageKey]);
@@ -650,10 +668,10 @@ function NetworkView({ networkId, accent }) {
           {nodes.map(node=><NodeCircle key={node.id} node={node} selected={selectedNode?.id===node.id} onSelect={handleSelect}/>)}
         </svg>
         <div style={{ position:"absolute", bottom:14, left:18, fontFamily:"'Space Mono',monospace", fontSize:"9px", color:"rgba(255,255,255,0.18)", lineHeight:2 }}>
-          drag to reposition · click to explore
+          drag to reposition Â· click to explore
           <div style={{ display:"flex", gap:"12px", marginTop:"4px" }}>
             {["consolidated","provisional","contested","proposed"].map(s=>(
-              <span key={s} style={{ color: s==="contested"?"#f472b6":s==="proposed"?"rgba(255,255,255,0.3)":"rgba(255,255,255,0.18)" }}>○ {s}</span>
+              <span key={s} style={{ color: s==="contested"?"#f472b6":s==="proposed"?"rgba(255,255,255,0.3)":"rgba(255,255,255,0.18)" }}>â—‹ {s}</span>
             ))}
           </div>
         </div>
@@ -673,7 +691,7 @@ function NetworkView({ networkId, accent }) {
           ))}
         </div>
         <div style={{ flex:1, overflow:"hidden", padding:"20px 20px 16px" }}>
-          {rightPanel==="input" && <InputPanel onPropose={handlePropose} networkContext={net.label+" — "+net.subtitle} existingNodes={nodes} />}
+          {rightPanel==="input" && <InputPanel onPropose={handlePropose} networkContext={net.label+" â€” "+net.subtitle} existingNodes={nodes} />}
           {rightPanel==="review" && <ReviewPanel proposed={proposed} networkNote={networkNote} onAccept={handleAccept} onReject={handleReject} onAcceptAll={handleAcceptAll} existingNodes={nodes} />}
           {rightPanel==="detail" && !selectedNode && <EmptyState nodes={nodes} onSelect={n=>{setSelected(n);setRightPanel("detail");}} accent={accent} onReset={handleReset} />}
           {rightPanel==="detail" && selectedNode && <NodeDetail node={selectedNode} nodes={nodes} onSelectRelated={n=>setSelected(n)} onDelete={()=>deleteNode(selectedNode.id)} onStatusChange={handleStatusChange} />}
@@ -700,7 +718,7 @@ function LandingPage({ onSelect }) {
           Living Vocabularies
         </div>
         <div style={{ fontSize:"16px", fontStyle:"italic", color:"rgba(255,255,255,0.35)", fontWeight:300, maxWidth:"520px", lineHeight:1.75 }}>
-          A growing collection of semantic networks — shared languages for inquiry, practice, and world-making.
+          A growing collection of semantic networks â€” shared languages for inquiry, practice, and world-making.
         </div>
       </div>
 
@@ -776,7 +794,7 @@ function LandingPage({ onSelect }) {
       {/* Footer */}
       <div style={{ padding:"1.5rem 3rem", borderTop:"1px solid rgba(255,255,255,0.05)" }}>
         <div style={{ fontFamily:"'Space Mono',monospace", fontSize:"9px", color:"rgba(255,255,255,0.12)", letterSpacing:"0.1em" }}>
-          {Object.keys(NETWORKS).length} vocabularies · {Object.values(NETWORKS).reduce((sum, n) => sum + n.initialNodes.length, 0)} terms
+          {Object.keys(NETWORKS).length} vocabularies Â· {Object.values(NETWORKS).reduce((sum, n) => sum + n.initialNodes.length, 0)} terms
         </div>
       </div>
     </div>
@@ -812,7 +830,7 @@ const [activeNet, setActiveNet] = useState(
             onMouseEnter={e => e.currentTarget.style.color = "rgba(255,255,255,0.7)"}
             onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.3)"}
           >
-            ← all vocabularies
+            â† all vocabularies
           </button>
           <div style={{ width:1, height:16, background:"rgba(255,255,255,0.1)" }} />
           <div>
@@ -828,7 +846,7 @@ const [activeNet, setActiveNet] = useState(
 
       <div style={{ padding:"7px 24px", borderBottom:"1px solid rgba(255,255,255,0.05)", background:"rgba(255,255,255,0.01)", flexShrink:0 }}>
         <span style={{ fontFamily:"'Space Mono',monospace", fontSize:"9px", color:"rgba(255,255,255,0.22)", letterSpacing:"0.1em" }}>
-          {net.subtitle} · {net.initialNodes.length} seed terms
+          {net.subtitle} Â· {net.initialNodes.length} seed terms
         </span>
       </div>
 
@@ -841,3 +859,5 @@ const [activeNet, setActiveNet] = useState(
 
 const secLabel = { fontSize:"10px", fontFamily:"'Space Mono',monospace", color:"rgba(255,255,255,0.27)", letterSpacing:"0.12em", marginBottom:"9px", marginTop:"4px" };
 const inputSt = { width:"100%", background:"rgba(255,255,255,0.05)", border:"1px solid rgba(255,255,255,0.1)", borderRadius:"7px", padding:"10px 12px", color:"#e2e8f0", fontSize:"14px", fontFamily:"'Crimson Pro',Georgia,serif", outline:"none", boxSizing:"border-box", display:"block" };
+
+
