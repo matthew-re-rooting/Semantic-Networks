@@ -50,42 +50,60 @@ const NETWORKS = {
 // ---VOCABULARY GROUPS (for landing page organisation) ---
 const GROUPS = [
   {
-    id: "foundation",
-    label: "Foundation",
-    description: "The meta-vocabularies that frame and introduce all the others",
-    networkIds: ["meta","methods","creativity","musicality"],
+    id: "frameworks",
+    label: "Frameworks",
+    description: "Systematic conceptual architectures that organize how inquiry proceeds",
+    networkIds: ["goethean-phenomenology", "heidegger", "husserl", "merleau-ponty", "dsa", "simulation", "worlding", "livelihoods"],
   },
   {
-    id: "ontological",
-    label: "Ontological",
-    description: "Vocabularies concerned with worlds, movement, and the nature of being",
-    networkIds: ["worlding","livelihoods","movement","resonance"],
+    id: "trajectories",
+    label: "Trajectories",
+    description: "Vocabularies that trace arcs, developments, and unfolding movements of thought",
+    networkIds: ["meta", "resonance"],
   },
   {
-    id: "cultural",
-    label: "Cultural & Critical",
-    description: "Vocabularies grounded in specific cultural and critical traditions",
-    networkIds: ["vienna","simulation"],
+    id: "methodologies",
+    label: "Methodologies",
+    description: "Practices and approaches for inquiry, research, and knowledge generation",
+    networkIds: ["methods"],
   },
   {
-    id: "applied",
-    label: "Applied",
-    description: "Vocabularies developed in and for specific research and community contexts",
-    networkIds: ["dsa"],
+    id: "phenomenologies",
+    label: "Phenomenologies",
+    description: "Vocabularies for what it is like to inhabit particular conditions of existence",
+    networkIds: ["hinterlands", "deluge-phenomenology", "zombie-phenomenology", "bardo-phenomenology"],
   },
   {
-      id: "phenomenological-frameworks",
-      label: "Phenomenological Frameworks",
-      description: "Systematic philosophical architectures for understanding experience, consciousness, and being",
-      networkIds: ["goethean-phenomenology","heidegger","husserl","merleau-ponty"],
-    },
-    {
-      id: "social-phenomenologies",
-      label: "Social Phenomenologies",
-      description: "Imaginal worlds and their bodily effects — what it is like to inhabit particular conditions of existence",
-      networkIds: ["hinterlands","deluge-phenomenology","zombie-phenomenology","bardo-phenomenology"],
-    },
-  ];
+    id: "paradoxes",
+    label: "Paradoxes",
+    description: "Vocabularies structured around tension, contradiction, and irreducible complexity",
+    networkIds: [],
+  },
+  {
+    id: "complements",
+    label: "Complements",
+    description: "Networks that work as pairs or counterparts, illuminating each other",
+    networkIds: [],
+  },
+  {
+    id: "places",
+    label: "Places",
+    description: "Vocabularies grounded in specific locations, territories, and spatial traditions",
+    networkIds: [],
+  },
+  {
+    id: "themes",
+    label: "Themes",
+    description: "Thematic vocabularies cutting across domains of practice and inquiry",
+    networkIds: ["musicality", "creativity", "usefulness", "movement", "digitalstewarding"],
+  },
+  {
+    id: "studies",
+    label: "Studies",
+    description: "Deep dives into particular cultural, historical, and aesthetic traditions",
+    networkIds: ["vienna"],
+  },
+];
 
 // ---CONSTANTS ---
 
