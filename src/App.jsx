@@ -734,7 +734,10 @@ function NetworkView({ networkId, accent }) {
 
 // ---LANDING PAGE ---
 
-function LandingPage({ onSelect }) {
+function LandingPage({ onSelect, filterGroup }) {
+  const visibleGroups = filterGroup
+    ? GROUPS.filter(g => g.id === filterGroup)
+    : GROUPS;
   return (
     <div style={{ minHeight:"100vh", background:"#0d0d14", color:"#e2e8f0", fontFamily:"'Crimson Pro',Georgia,serif" }}>
       <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
@@ -835,15 +838,16 @@ function LandingPage({ onSelect }) {
 
 export default function App() {
   const params = new URLSearchParams(window.location.search);
-const networkParam = params.get('network');
-const [activeNet, setActiveNet] = useState(
-  networkParam && NETWORKS[networkParam] ? networkParam : null
-);;
+  const networkParam = params.get('network');
+  const groupParam = params.get('group');
+  const [activeNet, setActiveNet] = useState(
+    networkParam && NETWORKS[networkParam] ? networkParam : null
+  );
   const net = activeNet ? NETWORKS[activeNet] : null;
 
   // If no network selected, show landing page
   if (!activeNet || !net) {
-    return <LandingPage onSelect={setActiveNet} />;
+    return <LandingPage onSelect={setActiveNet} filterGroup={groupParam} />;
   }
 
   return (
