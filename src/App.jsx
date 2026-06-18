@@ -745,9 +745,9 @@ function LandingPage({ onSelect }) {
           Re-Rooting Research
         </div>
         <div style={{ fontSize:"32px", fontWeight:300, color:"#f1f5f9", letterSpacing:"-0.02em", marginBottom:"0.75rem" }}>
-          Living Vocabularies
+          Semantic Networks
         </div>
-        <div style={{ fontSize:"16px", fontStyle:"italic", color:"rgba(255,255,255,0.35)", fontWeight:300, maxWidth:"520px", lineHeight:1.75 }}>
+        <div style={{ fontSize:"16px", fontStyle:"italic", color:"rgba(255,255,255,0.35)", fontWeight:300, maxWidth:"520px", lineHeight:1.75, textAlign:"center", margin:"0 auto" }}>
           A growing collection of semantic networks â€” shared languages for inquiry, practice, and world-making.
         </div>
       </div>
@@ -889,6 +889,7 @@ const [activeNet, setActiveNet] = useState(
 
 const secLabel = { fontSize:"10px", fontFamily:"'Space Mono',monospace", color:"rgba(255,255,255,0.27)", letterSpacing:"0.12em", marginBottom:"9px", marginTop:"4px" };
 const inputSt = { width:"100%", background:"rgba(255,255,255,0.05)", border:"1px solid rgba(255,255,255,0.1)", borderRadius:"7px", padding:"10px 12px", color:"#e2e8f0", fontSize:"14px", fontFamily:"'Crimson Pro',Georgia,serif", outline:"none", boxSizing:"border-box", display:"block" };
+
 
 
 
